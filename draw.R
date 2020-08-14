@@ -255,6 +255,14 @@ ggplot(aes(x=Diameter,y=FP/(TP+FP),color=as.factor(ErrLen)),data=d[d$E=="16S.B_U
 ggsave("16SB_4k_FDR.pdf", width=6, height=6)
 
 
+ggplot(data=d[d$N > 19 &d$ks %in% c("1k", "3k") ,])+
+  geom_point(aes(x=Diameter,y=FP0/(TN0+FP0),color=as.factor(ks),linetype="Before error",shape="Before error"),alpha=0.1)+
+  geom_smooth(aes(x=Diameter,y=FP0/(TN0+FP0),color=as.factor(ks),linetype="Before error",shape="Before error"),se=F)+
+  geom_point(aes(x=Diameter,y=FP/(TN+FP),color=as.factor(ks),linetype="After error",shape="After error"),alpha=0.1)+
+  geom_smooth(aes(x=Diameter,y=FP/(TN+FP),color=as.factor(ks),linetype="After error",shape="After error"),se=F)+
+  scale_shape(name="")+scale_color_brewer(palette = "Dark2",name="k setting", labels = function(x) (paste(x, "setting")))+theme_classic()+
+  scale_y_log10("FPR")#+coord_cartesian(ylim=c(0,0.003))
+ggsave("16SB_before_FPR.pdf", width=6, height=6)  
 
 # ROC all
 
@@ -266,10 +274,10 @@ ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point
   theme_light()+theme(legend.position = c(.65,.1),legend.direction = "horizontal")+
   #geom_point(data=B)+
   #geom_line(aes(group=ks),data=B,linetype=2)+
-  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Dark2",label = function(x) (paste(x, " setting")))+
+  scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Dark2",label = function(x) (paste(x, " setting")))+
   scale_x_continuous(name="FPR",labels=percent)+facet_wrap(~ErrLen,scales="free_y",labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
-  scale_y_continuous("Recall",labels=percent)+#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
-  ggtitle("16S.B: ROC")
+  scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+  #ggtitle("16S.B: ROC")
 ggsave("16SB_allKs_ROC.pdf", width=8.5, height=7)
 
 
