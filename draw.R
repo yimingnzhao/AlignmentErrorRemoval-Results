@@ -255,14 +255,45 @@ ggplot(aes(x=Diameter,y=FP/(TP+FP),color=as.factor(ErrLen)),data=d[d$E=="16S.B_U
 ggsave("16SB_4k_FDR.pdf", width=6, height=6)
 
 
-ggplot(data=d[d$N > 19 &d$ks %in% c("1k", "3k") ,])+
-  geom_point(aes(x=Diameter,y=FP0/(TN0+FP0),color=as.factor(ks),linetype="Before error",shape="Before error"),alpha=0.1)+
-  geom_smooth(aes(x=Diameter,y=FP0/(TN0+FP0),color=as.factor(ks),linetype="Before error",shape="Before error"),se=F)+
-  geom_point(aes(x=Diameter,y=FP/(TN+FP),color=as.factor(ks),linetype="After error",shape="After error"),alpha=0.1)+
-  geom_smooth(aes(x=Diameter,y=FP/(TN+FP),color=as.factor(ks),linetype="After error",shape="After error"),se=F)+
-  scale_shape(name="")+scale_color_brewer(palette = "Dark2",name="k setting", labels = function(x) (paste(x, "setting")))+theme_classic()+
-  scale_y_log10("FPR")#+coord_cartesian(ylim=c(0,0.003))
-ggsave("16SB_before_FPR.pdf", width=6, height=6)  
+ggplot(data=d[d$N > 19 &d$ks %in% c("3k") ,])+
+  geom_point(aes(x=Diameter,y=FP/(TN+FP),linetype="After error",color="After error"),alpha=0.4,size=.6)+
+  geom_smooth(aes(x=Diameter,y=FP/(TN+FP),linetype="After error",color="After error"),se=F)+
+  geom_point(aes(x=Diameter,y=FP0/(TN0+FP0),linetype="Before error",color="Before error"),alpha=0.4,size=.6)+
+  geom_smooth(aes(x=Diameter,y=FP0/(TN0+FP0),linetype="Before error",color="Before error"),se=F)+
+  scale_shape(name="",solid = T)+scale_color_brewer(palette = "Dark2",name="")+
+  facet_wrap(~ErrLen,nrow=2,labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  theme_classic()+theme(legend.position=c(.89,.15))+
+  scale_linetype_manual(name="",values=c(1,1))+
+  scale_x_continuous(breaks=c(1/4,1/2,3/4,1))+scale_y_log10("FPR")#+coord_cartesian(ylim=c(0,0.003))
+ggsave("16SB_before_FPR.pdf", width=8, height=4)  
+
+ggplot(aes(x=Diameter,y=FP/(TN+FP),color=as.factor(ks)),data=d[d$N > 19 ,])+
+  geom_point(alpha=0.3,size=0.7)+
+  geom_smooth(se=F)+
+  facet_wrap(~ErrLen,nrow=2,labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_shape(name="")+scale_color_brewer(palette = "Dark2",name="", labels = function(x) (paste(x, "setting")))+
+  theme_classic()+theme(legend.position = c(.89,.15))+
+  scale_x_continuous(breaks=c(1/4,1/2,3/4,1))+scale_y_log10("FPR")
+ggsave("16SB_allk_FPR.pdf", width=8, height=4)  
+
+
+ggplot(aes(x=Diameter,y=FP/(TP+FP),color=as.factor(ks)),data=d[d$N > 19 ,])+
+  geom_point(alpha=0.3,size=0.7)+
+  geom_smooth(se=F)+
+  facet_wrap(~ErrLen,nrow=2,labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_shape(name="")+scale_color_brewer(palette = "Dark2",name="", labels = function(x) (paste(x, "setting")))+
+  theme_classic()+theme(legend.position = c(.89,.15))+
+  scale_x_continuous(breaks=c(1/4,1/2,3/4,1))+scale_y_continuous("FDR")
+ggsave("16SB_allk_FDR.pdf", width=8, height=4)  
+
+ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ks)),data=d[d$N > 19 ,])+
+  geom_point(alpha=0.3,size=0.7)+
+  geom_smooth(se=F)+
+  facet_wrap(~ErrLen,nrow=2,labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_shape(name="")+scale_color_brewer(palette = "Dark2",name="", labels = function(x) (paste(x, "setting")))+
+  theme_classic()+theme(legend.position = c(.89,.15))+
+  scale_x_continuous(breaks=c(1/4,1/2,3/4,1))+scale_y_continuous("Recall")
+ggsave("16SB_allk_Recall.pdf", width=8, height=4)  
 
 # ROC all
 
@@ -275,7 +306,8 @@ ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point
   #geom_point(data=B)+
   #geom_line(aes(group=ks),data=B,linetype=2)+
   scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Dark2",label = function(x) (paste(x, " setting")))+
-  scale_x_continuous(name="FPR",labels=percent)+facet_wrap(~ErrLen,scales="free_y",labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_x_continuous(name="FPR",labels=percent)+
+  facet_wrap(~ErrLen,scales="free_y", nrow=2, labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
   scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
   #ggtitle("16S.B: ROC")
 ggsave("16SB_allKs_ROC.pdf", width=8.5, height=7)
