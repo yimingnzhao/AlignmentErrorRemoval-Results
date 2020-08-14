@@ -2,7 +2,7 @@
 
 ## CSV Files ##
 Contains the CSV data used in R plots.  
-*res.csv* - contains results for general, varying error lengths, and varying percentage of erroneous sequences for 16S.B, Hackett, and small-10-aa  
+*res.csv* - contains results for general, varying error lengths, and varying percentage of erroneous sequences for 16S.B, Hackett, and small-10-aa. All of the results use 3 k values, and the general data draws parameters from normal distributions. The specific parameters are specified in the Figures section.  
 *save_res.csv* - contains same data as res.csv, just used to ensure backup copy  
 *variedUnion.csv* - contains results for the union of running the correction algorithm multiple times with varying k values  
 
@@ -12,7 +12,8 @@ Contains the .fasta files of alignments used in the error simulation process, or
 ## Figures ##
 *General Figures* - contains figures of error parameters being drawn from a normal distribution
 - Error lengths are drawn from normal distribution centered at 50 with standard deviation 10
-- For number of sequences with error, x is drawn from normal distribution centered at 20 with standard deviation 2. The alignment will have N/x erroneous sequences, where N is the total number of sequences in the alignment.
+- For number of sequences with error, x is drawn from normal distribution centered at 20 with standard deviation 2. The alignment will have N/x erroneous sequences, where N is the total number of sequences in the alignment.  
+
 *Union Figures* - contains figures for testing the union of running the correction algorithm multiple times with varying k values.
 - 2 k values: 
   - k = 5 to cover errors of length [0, 30]
@@ -20,13 +21,15 @@ Contains the .fasta files of alignments used in the error simulation process, or
 - 3 k values:
   - k = 5 to cover errors of length [0, 30]
   - k = 9 to cover errors of length [0, 54]
-  - k = 19 to cover all errors
+  - k = 17 to cover all errors
 - 4 k values:
   - k = 5 to cover errors of length [0, 20]
   - k = 7 to cover errors of length [0, 35]
   - k = 11 to cover errors of length [0, 66]
-  - k = 17 to cover all errors
-*ErrLen Figures* - contains figures of varying error lengths, with the percentage of erroneous sequences being set to 5%
+  - k = 17 to cover all errors  
+  
+*ErrLen Figures* - contains figures of varying error lengths, with the percentage of erroneous sequences being set to 5%  
+
 *NumErrSeq Figures* - contains figures of varying percentage of erroneous sequences, with the error length being set to 88 characters.
 
 ## Script Results ##
