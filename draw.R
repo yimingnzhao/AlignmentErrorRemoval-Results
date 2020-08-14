@@ -1,5 +1,5 @@
 require(ggplot2); require(scales); require(reshape2)
-d=(read.csv("~/Linux Files/AlignmentErrorRemoval-Results/CSV_Files/res.csv", sep=",", header=F))
+d=(read.csv("./CSV_Files/res.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 nlabels = c("1","2%","5%","10%","20%")
 
@@ -200,8 +200,9 @@ ggsave("small10aa_General_ROC.pdf", width=6, height=6)
 
 
 # Plots figures for union of running the correction algorithm on different k values
-d=(read.csv("~/Linux Files/AlignmentErrorRemoval-Results/CSV_Files/variedUnion.csv", sep=",", header=F))
-names(d) <- c("E", "DR", "Diameter", "PD", "N", "ErrLen", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
+d=(read.csv("./CSV_Files/variedUnion.csv", sep=",", header=F))
+d$E=paste(d$V1,revalue(d$V2, c("1k"="")),sep="")
+names(d) <- c("X", "ks", "DR", "Diameter", "PD", "N", "ErrLen", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN","E")
 
 # Recall vs Diameter
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="16S.B_ErrLen" & d$N > 10 & d$ErrLen!=0,])+
@@ -252,6 +253,23 @@ ggplot(aes(x=Diameter,y=FP/(TP+FP),color=as.factor(ErrLen)),data=d[d$E=="16S.B_U
   scale_shape(name="")+scale_color_brewer(palette = "Paired",name="error len", labels = function(x) (paste(x, intToUtf8(215), "11")))+
   ggtitle("16S.B using Union of 4k: FDR vs Diameter")
 ggsave("16SB_4k_FDR.pdf", width=6, height=6)
+
+
+
+# ROC all
+
+options(digits = 2)
+d2=summ_roc(d[d$N > 19,], ks+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point(alpha=1)+
+  theme_light()+theme(legend.position = c(.85,.1),legend.direction = "horizontal")+geom_point(data=B)+
+  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Dark2",labels = function(x) (paste(x, " values")))+
+  scale_x_continuous(name="FPR",labels=percent)+facet_wrap(~ErrLen)+
+  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1, 1.1))+#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+  ggtitle("16S.B: ROC")
+ggsave("16SB_allKs_ROC.pdf", width=6, height=6)
+
 
 # ROC
 options(digits = 2)
