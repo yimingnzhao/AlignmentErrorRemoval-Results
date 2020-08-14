@@ -2,6 +2,8 @@ require(ggplot2); require(scales); require(reshape2)
 d=(read.csv("./CSV_Files/res.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 nlabels = c("1","2%","5%","10%","20%")
+d$n=with(d,as.factor(round(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100))))
+d$ErrLen = (d$ErrLen==0)*8+d$ErrLen
 
 # General Results: Recall vs Diameter
 # Uses normal distribution to draw the error lengths and number of erroneuous sequences
@@ -86,13 +88,27 @@ summ_roc <- function(d2,form) {
 
 # ROC for 16S.B with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
+d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19 ,], n+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen,  n=d2$n, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), n=d2$n, ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A, aes(x, y, shape=interaction(n,ErrLen,sep="%, "),color=as.factor(DR))) + 
+  geom_point(alpha=1)+
+  geom_path(aes(group=interaction(DR,n)),linetype=2)+geom_path(aes(group=interaction(DR,ErrLen)),linetype=1)+
+  theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
+  scale_shape_manual(name="Err. Freq%, Len",values=c(1,2,5,15,17,8,19,18,3,4,6),labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))+
+  scale_color_brewer(name="Diameter",palette = "Paired")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent)+
+  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
+ggsave("16SB_ErrLenNumErr_ROC.pdf", width=8, height=6)
+
 d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen") & d$N > 19 ,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.factor(DR))) + 
+ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.factor(DR))) +
   geom_point(alpha=1)+geom_line()+
   theme_bw()+theme(legend.position = "right")+
-  geom_linerange(aes(x=x,ymin=0.98,ymax=0.999,color=as.factor(DR)),data=B,linetype=1,size=1)+
+  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)+
   scale_shape_manual(name="Error Length",values=c(1,2,5,6,15,17,19),labels = function(x) (paste(x, intToUtf8(215), "11")))+
   scale_color_brewer(name="Diameter",palette = "Paired")+
   scale_x_continuous(name="FPR",labels=percent)+
