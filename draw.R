@@ -262,13 +262,15 @@ options(digits = 2)
 d2=summ_roc(d[d$N > 19,], ks+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point(alpha=1)+
-  theme_light()+theme(legend.position = c(.85,.1),legend.direction = "horizontal")+geom_point(data=B)+
-  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Dark2",labels = function(x) (paste(x, " values")))+
-  scale_x_continuous(name="FPR",labels=percent)+facet_wrap(~ErrLen)+
-  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1, 1.1))+#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point(alpha=0.99)+geom_line(aes(group=ks))+
+  theme_light()+theme(legend.position = c(.65,.1),legend.direction = "horizontal")+
+  #geom_point(data=B)+
+  #geom_line(aes(group=ks),data=B,linetype=2)+
+  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Dark2",label = function(x) (paste(x, " setting")))+
+  scale_x_continuous(name="FPR",labels=percent)+facet_wrap(~ErrLen,scales="free_y",labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_y_continuous("Recall",labels=percent)+#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
   ggtitle("16S.B: ROC")
-ggsave("16SB_allKs_ROC.pdf", width=6, height=6)
+ggsave("16SB_allKs_ROC.pdf", width=8.5, height=7)
 
 
 # ROC
