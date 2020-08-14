@@ -86,16 +86,18 @@ summ_roc <- function(d2,form) {
 
 # ROC for 16S.B with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
-d2=summ_roc(d[d$E=="16S.B_ErrLen" & d$N > 19 & d$ErrLen!=0,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen") & d$N > 19 ,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A, aes(x, y, color=as.factor(ErrLen), shape=as.factor(DR))) + geom_point(alpha=1)+
-  theme_light()+theme(legend.position = "right")+geom_point(data=B)+
-  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Paired",labels = function(x) (paste(x, intToUtf8(215), "11")))+
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.factor(DR))) + 
+  geom_point(alpha=1)+geom_line()+
+  theme_bw()+theme(legend.position = "right")+
+  geom_linerange(aes(x=x,ymin=0.98,ymax=0.999,color=as.factor(DR)),data=B,linetype=1,size=1)+
+  scale_shape_manual(name="Error Length",values=c(1,2,5,6,15,17,19),labels = function(x) (paste(x, intToUtf8(215), "11")))+
+  scale_color_brewer(name="Diameter",palette = "Paired")+
   scale_x_continuous(name="FPR",labels=percent)+
-  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1))+
-  ggtitle("16S.B with Varying Error Lengths: ROC")
-ggsave("16SB_ErrLen_ROC.pdf", width=6, height=6)
+  scale_y_continuous("Recall",labels=percent)
+ggsave("16SB_ErrLen_ROC.pdf", width=6, height=4.5)
 
 # ROC for 16S.B with varying percentages of erroneous sequences and fixed error lengths
 d2=d[d$E=="16S.B_NumErrAlns",]
@@ -302,15 +304,15 @@ d2=summ_roc(d[d$N > 19,], ks+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, ks=d2$ks, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 ggplot(data=A, aes(x, y, color=as.factor(ks), shape=as.factor(DR))) + geom_point(alpha=0.99)+geom_line(aes(group=ks))+
-  theme_light()+theme(legend.position = c(.65,.1),legend.direction = "horizontal")+
+  theme_bw()+theme(legend.position = c(.87,.15),legend.box.just = "top",legend.box = "horizontal")+
   #geom_point(data=B)+
   #geom_line(aes(group=ks),data=B,linetype=2)+
-  scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Dark2",label = function(x) (paste(x, " setting")))+
+  scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Dark2",label = function(x) substr(gsub(pattern = ""," ",x),2,4) )+
   scale_x_continuous(name="FPR",labels=percent)+
-  facet_wrap(~ErrLen,scales="free_y", nrow=2, labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  facet_wrap(~ErrLen,nrow=2,scales="free_y", labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
   scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
   #ggtitle("16S.B: ROC")
-ggsave("16SB_allKs_ROC.pdf", width=8.5, height=7)
+ggsave("16SB_allKs_ROC.pdf", width=10, height=5)
 
 
 # ROC
