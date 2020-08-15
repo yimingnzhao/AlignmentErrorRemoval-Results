@@ -18,14 +18,7 @@ ggsave("small10aa_General_Recall.pdf", width=6, height=6)
 
 # Recall vs Diameter
 
-# 16S.B - Varying error lengths and fixed percentage of erroneous sequences
-ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="16S.B_ErrLen" & d$N > 19,])+
-  geom_point(alpha=0.5)+theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
-  scale_shape(name="")+scale_color_brewer(palette = "Paired",name="error len", labels = function(x) (paste(x, intToUtf8(215), "11")))+
-  ggtitle("16S.B with Varying Error Lengths: Recall vs Diameter")
-ggsave("16S.B_ErrLen_Recall.pdf",width = 6,height = 6)
-
-# 16S.B - Varying error lengths and fixed percentage of erroneous sequences
+# 16S.B - Varying both
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])+
   geom_point(alpha=0.4,size=.5)+
   theme_classic()+theme(legend.position = c(.75,.15),legend.direction = "horizontal", legend.text.align = 1)+
@@ -33,6 +26,22 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLen,sep="%, ")),data=d
   scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
 ggsave("16S.B_ErrLenNumErr_Recall.pdf",width = 9,height = 4.5)
+
+ggplot(aes(x=Diameter,y=FP/(TP+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])+
+  geom_point(alpha=0.4,size=.5)+
+  theme_classic()+theme(legend.position = c(.75,.15),legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth()+scale_y_continuous("FDR")+
+  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
+  scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
+ggsave("16S.B_ErrLenNumErr_FDR.pdf",width = 9,height = 4.5)
+
+
+# 16S.B - Varying error lengths and fixed percentage of erroneous sequences
+ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="16S.B_ErrLen" & d$N > 19,])+
+  geom_point(alpha=0.5)+theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
+  scale_shape(name="")+scale_color_brewer(palette = "Paired",name="error len", labels = function(x) (paste(x, intToUtf8(215), "11")))+
+  ggtitle("16S.B with Varying Error Lengths: Recall vs Diameter")
+ggsave("16S.B_ErrLen_Recall.pdf",width = 6,height = 6)
 
 
 # 16S.B - Varying percentage of erroneous sequences and fixed error lengths
@@ -54,6 +63,14 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLen,sep="%, ")),data=d
   scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
 ggsave("Hackett_ErrLenNumErr_Recall.pdf",width = 9,height = 4.5)
 
+
+ggplot(aes(x=Diameter,y=TP/(TP+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") & d$N > 19,])+
+  geom_point(alpha=0.5,size=1)+
+  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR")+
+  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
+  scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
+ggsave("Hackett_ErrLenNumErr_FDR.pdf",width = 9,height = 4.5)
 
 # Hackett - Varying error lengths and fixed percentage of erroneous sequences
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="Hackett_ErrLen" & d$N > 19,])+
@@ -81,6 +98,14 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLen,sep="%, ")),data=d
   scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
 ggsave("small-10-aa_ErrLenNumErr_Recall.pdf",width = 9,height = 4.5)
+
+ggplot(aes(x=Diameter,y=TP/(TP+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns") & d$N > 19,])+
+  geom_point(alpha=0.5,size=1)+
+  theme_classic()+theme(legend.position = c(.75,.15),legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR")+
+  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
+  scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
+ggsave("small-10-aa_ErrLenNumErr_FDR.pdf",width = 9,height = 4.5)
 
 # small-10-aa - Varying error lengths and fixed percentage of erroneous sequences
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="small-10-aa_ErrLen" & d$N > 19,])+
