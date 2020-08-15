@@ -118,7 +118,7 @@ summ_roc <- function(d2,form) {
 
 # ROC all 
 options(digits = 2)
-d$E2=sub("_.*","",d2$E)
+d$E2=sub("_.*","",d$E)
 d2=summ_roc(d[grepl("Err",d$E) & d$N > 19 ,], E2+n+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN),E =d2$E2, ErrLen=d2$ErrLen,  n=d2$n, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), E =d2$E2, n=d2$n, ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
@@ -131,7 +131,7 @@ ggplot(data=A, aes(x, y, shape=interaction(n,ErrLen,sep="%, "),color=as.factor(D
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
-ggsave("All_both_ROC.pdf", width=5, height=10)
+ggsave("All_both_ROC.pdf", width=6, height=10)
 
 
 # ROC for 16S.B with varying error lengths and fixed percentage of erroneous sequences
