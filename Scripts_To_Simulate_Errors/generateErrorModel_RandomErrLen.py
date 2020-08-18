@@ -99,7 +99,7 @@ Return:
     list: list of sequence indices to modify
 """
 def getErrSequences( length, size ):
-    if size > length:
+    if size < length:
         length = size
     sequence_errs = []
     for i in range( length ):
@@ -244,14 +244,19 @@ with open( reformat_file, "r" ) as file_object:
 sys.stderr.write("Number of Alignments: " + str(num_alignments) + "\n");
 sys.stderr.write("Chars in Alignment: " + str(chars_in_alignment) + "\n");
 
-if ( num_alignments < num_erroneous_alignments ):
+if ( num_alignments <= num_erroneous_alignments ):
     num_erroneous_alignments = num_alignments;
+    print("Picking all sequences to be erroneous")
 
 # Creates file with alignment sequence errors
 f = open( reformat_file, "r" );
 error_f = open( error_file, "a" );
 pos_f = open(position_file, "a")
 sequence_errs = getErrSequences( num_erroneous_alignments, num_alignments );
+print(num_erroneous_alignments)
+print(num_alignments)
+print(sequence_errs)
+
 count = 0;
 if  data_type == "RNA":
     data_type = RNA_DATA
