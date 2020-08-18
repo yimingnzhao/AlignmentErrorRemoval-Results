@@ -9,6 +9,9 @@ Contains the CSV data used in R plots.
 ## FASTA Data ##
 Contains the .fasta files of alignments used in the error simulation process, organized by diameter ranges
 
+## 8000orthologs ##
+Contains the initial alignments, as well as the output of the tool (using 3 k values specified in the Figures section), of each gene. 
+
 ## Figures ##
 *General Figures* - contains figures of error parameters being drawn from a normal distribution
 - Error lengths are drawn from normal distribution centered at 50 with standard deviation 10
