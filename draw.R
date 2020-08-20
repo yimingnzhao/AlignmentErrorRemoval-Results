@@ -55,7 +55,7 @@ ggplot(data=A, aes(x, y, shape=interaction(n,ErrLenT,sep=", "),color=as.factor(D
   geom_path(aes(group=interaction(DR,n)),linetype=2)+geom_path(aes(group=interaction(DR,ErrLenT)),linetype=1)+
   theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
   scale_shape_manual(name="Err Freq%, Len",values=c(1,2,5,15,17,8,19,18,3,4,6))+
-  scale_color_brewer(name="Diameter",palette = "Paired")+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
@@ -72,11 +72,11 @@ A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLenT=d2$ErrLenT, 
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), n=d2$n, ErrLenT=d2$ErrLenT, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
-  geom_path(aes(group=interaction(DR,n)),data=A[A$n!="~5%",],linetype=1)+
-  geom_path(aes(group=interaction(DR,ErrLenT)),data=A[A$n!="~5%",],linetype=2)+
+  geom_path(aes(group=interaction(DR,n)),data=A[A$n!="~5%",],linetype=2)+
+  geom_path(aes(group=interaction(DR,ErrLenT)),data=A[A$n!="~5%",],linetype=1)+
   theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
   scale_shape_manual(name="Length, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
-  scale_color_brewer(name="Diameter",palette = "Paired")+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
@@ -87,7 +87,7 @@ ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(D
   geom_path(aes(group=DR),data=A[A$n!="~5%",],linetype=1)+
   theme_bw()+theme(legend.position = "bottom",legend.text.align = 1)+
   scale_shape_manual(name="",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
-  scale_color_brewer(name="Diameter",palette = "Paired")+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+facet_wrap(~ErrLenT=="8×11",labeller = function(x) list(c("Changing Error Length", "Changing Error Frequency")))+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
@@ -219,7 +219,7 @@ ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.f
   theme_bw()+theme(legend.position = "right")+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)+
   scale_shape_manual(name="Error Length",values=c(1,2,5,6,15,17,19),labels = function(x) (paste(x, intToUtf8(215), "11")))+
-  scale_color_brewer(name="Diameter",palette = "Paired")+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)
 ggsave("Figures/ErrParam_Figures/16SB_ErrLen_ROC.pdf", width=6, height=4.5)
