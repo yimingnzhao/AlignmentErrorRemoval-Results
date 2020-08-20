@@ -1,5 +1,5 @@
 require(ggplot2); require(scales); require(reshape2)
-d=(read.csv("./CSV_Files/res.csv", sep=",", header=F))
+d=(read.csv("C:/Users/Nathan Zhao/Documents/Linux Files/AlignmentErrorRemoval-Results/CSV_Files/res.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 nlabels = c("1","2%","5%","10%","20%")
 d$n=with(d,as.factor(round(100/((NumErrSeqDiv!=N|grepl("ErrLen$",E))*NumErrSeqDiv+(NumErrSeqDiv==N&!grepl("ErrLen$",E))*100))))
@@ -7,11 +7,11 @@ d$ErrLen = (d$ErrLen==0)*8+d$ErrLen
 
 # General Results: Recall vs Diameter
 # Uses normal distribution to draw the error lengths and number of erroneuous sequences
-ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="16S.B" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("16S.B: Recall vs Diameter")
+ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="16S.B_General" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("16S.B: Recall vs Diameter")
 ggsave("16SB_General_Recall.pdf", width=6, height=6)
-ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="Hackett" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("Hackett: Recall vs Diameter")
+ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="Hackett_General" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("Hackett: Recall vs Diameter")
 ggsave("Hackett_General_Recall.pdf", width=6, height=6)
-ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="small-10-aa-RV100-BBA0039" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("small-10-aa: Recall vs Diameter")
+ggplot(aes(x=Diameter, y=TP/(TP+FN)), data=d[d$E=="small-10-aa_Res" & d$N > 10 & d$ErrLen==8,]) + theme_classic() + geom_point() + geom_smooth() + scale_y_continuous("Recall") + ggtitle("small-10-aa: Recall vs Diameter")
 ggsave("small10aa_General_Recall.pdf", width=6, height=6)
 
 
@@ -253,7 +253,7 @@ ggsave("small10aa_NumErrAlns_ROC.pdf", width=6, height=6)
 
 # ROC for General 16S.B
 options(digits = 5)
-d2=summ_roc(d[d$E=="16S.B" & d$N > 10 & d$ErrLen==0,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+d2=summ_roc(d[d$E=="16S.B_General" & d$N > 10 & d$ErrLen==8,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 ggplot(data=A, aes(x, y, color=as.factor(DR))) + geom_point(alpha=1)+
@@ -266,7 +266,7 @@ ggsave("16SB_General_ROC.pdf", width=6, height=6)
 
 # ROC for General Hackett
 options(digits = 5)
-d2=summ_roc(d[d$E=="Hackett" & d$N > 10,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+d2=summ_roc(d[d$E=="Hackett_General" & d$N > 10,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 ggplot(data=A, aes(x, y, color=as.factor(DR))) + geom_point(alpha=1)+
@@ -288,7 +288,6 @@ ggplot(data=A, aes(x, y, color=as.factor(DR))) + geom_point(alpha=1)+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,0.9,0.95,1,1.1))+ggtitle("small-10-aa: ROC")
 ggsave("small10aa_General_ROC.pdf", width=6, height=6)
-
 
 
 
