@@ -137,7 +137,7 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumE
   scale_color_brewer(palette = "Paired",name="n",labels=nlabels)+
   scale_y_continuous(name="Recall")+coord_cartesian(ylim=c(0.35,1))+
   ggtitle("16S.B with Varying Number of Erroneous Sequences: Recall vs Diameter")
-ggsave("Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height = 6)
+ggsave("Figures/ErrParam_Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLenT,sep=", ")),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") & d$N > 19,])+
