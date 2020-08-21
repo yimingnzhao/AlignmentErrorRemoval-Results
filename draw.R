@@ -1,6 +1,7 @@
 require(ggplot2); require(scales); require(reshape2)
 d=(read.csv("./CSV_Files/res.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
+d=d[d$E!="small-10-aa_NumErrAlns",]
 nlabels = c("1","2%","5%","10%","20%")
 
 d$n=with(d,as.factor(round(100/((NumErrSeqDiv==0&grepl("ErrLen$",E))*20+(NumErrSeqDiv!=N|grepl("ErrLen$",E))*NumErrSeqDiv+(NumErrSeqDiv==N&!grepl("ErrLen$",E))*100))))
@@ -66,14 +67,14 @@ ggsave("Figures/General_Figures/small10aa_General_Recall.pdf", width=6, height=6
 # ROC all 
 options(digits = 2)
 d$E2=sub("_.*","",d$E)
-d2=summ_roc(d[grepl("Err",d$E) & d$N > 19 ,], E2+n+ErrLenT+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+d2=summ_roc(d[grepl("Err",d$E) & (d$N > 19|d$N==0)  ,], E2+n+ErrLenT+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN),E =d2$E2, ErrLenT=d2$ErrLenT,  n=d2$n, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), E =d2$E2, n=d2$n, ErrLenT=d2$ErrLenT, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
 ggplot(data=A, aes(x, y, shape=interaction(n,ErrLenT,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+facet_wrap(~sub("_.*","",E),ncol=1,scales="free_x")+
   geom_path(aes(group=interaction(DR,n)),linetype=2)+geom_path(aes(group=interaction(DR,ErrLenT)),linetype=1)+
   theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
-  scale_shape_manual(name="Err Freq%, Len",values=c(1,2,5,15,17,8,19,18,3,4,6))+
+  scale_shape_manual(name="Err Freq%, Len",values=c(1,2,5,15,17,8,19,18,3,4,6,10))+
   scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
@@ -100,6 +101,34 @@ ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(D
   scale_y_continuous("Recall",labels=percent)+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
 ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC.pdf", width=8, height=6)
+
+
+
+d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen") & d$N > 19 ,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.factor(DR))) +
+  geom_point(alpha=1)+geom_line()+
+  theme_bw()+theme(legend.position = "right")+
+  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)+
+  scale_shape_manual(name="Error Length",values=c(1,2,5,6,15,17,19),labels = function(x) (paste(x, intToUtf8(215), "11")))+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent)
+ggsave("Figures/ErrParam_Figures/16SB_ErrLen_ROC.pdf", width=6, height=4.5)
+
+# ROC for 16S.B with varying percentages of erroneous sequences and fixed error lengths
+d2=d[d$E=="16S.B_NumErrAlns",]
+d2$n=with(d2,as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)))
+ggplot(aes(x=FP/(FP+TN),y=TP/(TP+FN), color=as.factor(n) ),data=summ_roc(d2,n~.))+
+  geom_point(alpha=1)+
+  theme_light()+theme(legend.position = c(.85,.25))+
+  scale_color_brewer(name="n",labels=nlabels, palette="Paired")+
+  scale_x_continuous(name="FPR",labels=percent)+scale_y_continuous("Recall")+
+  ggtitle("16S.B with Varying Number of Erroneous Sequences: ROC")
+ggsave("Figures/ErrParam_Figures/16SB_NumErrAlns_ROC.pdf", width=6, height=6)
+
+
 
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
@@ -159,39 +188,73 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumE
 ggsave("Figures/ErrParam_Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
 
-ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(n,ErrLenT,sep=", ")),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") & d$N > 19,])+
-  geom_point(alpha=0.5,size=1)+
-  theme_classic()+theme(legend.position = c(.75,.15),legend.direction = "horizontal", legend.text.align = 1)+
+ggplot(aes(x=n,y=TP/(TP+FN),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") ,])+
+  geom_boxplot()+#geom_point(alpha=0.5,size=1)+
+  theme_classic()+theme(legend.position = c(.5,.15),legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall")+
-  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_Recall.pdf",width = 9,height = 4.5)
+  scale_shape(name="")+scale_x_discrete(name="Error frequency")+
+  scale_color_brewer(palette = "Paired",name="Error Length")
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_Recall.pdf",width = 5,height = 4.5)
 
 
-ggplot(aes(x=Diameter,y=FP/(TP+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") & d$N > 19,])+
-  geom_point(alpha=0.5,size=1)+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") ,])+
+  geom_boxplot()+#geom_point(alpha=0.5,size=1)+
+  theme_classic()+theme(legend.position = c(.15,.25),legend.direction = "vertical", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("FDR")+
-  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
+  scale_shape(name="")+scale_x_discrete(name="Error frequency")+
+  scale_color_brewer(palette = "Paired",name="Error Length")
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_FDR.pdf",width = 9,height = 4.5)
 
-# Hackett - Varying error lengths and fixed percentage of erroneous sequences
-ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="Hackett_ErrLen" & d$N > 19,])+
-  geom_point(alpha=0.5)+theme_classic()+geom_smooth(se=F)+scale_y_continuous("Recall")+
-  scale_shape(name="")+scale_color_brewer(palette = "Paired",name="error len")+
-  ggtitle("Hackett with Varying Error Lengths: Recall vs Diameter")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall.pdf",width = 6,height = 6)
 
-# Hackett - Varying percentage of erroneous sequences and fixed error lengths
-ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)),
-           color=as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)), shape=cut((FP/(FP+TN)),breaks=c(-1,0,0.001,0.1,1))),
-       data=d[d$E=="Hackett_NumErrAlns" ,])+geom_point(alpha=0.5)+
-  theme_classic()+geom_smooth(se=F)+scale_shape_manual(name="FPR",values=c(1,16,4))+
-  scale_color_brewer(palette = "Paired",name="n",labels=nlabels)+
-  scale_y_continuous(name="Recall")+coord_cartesian(ylim=c(0.35,1))+
-  ggtitle("Hackett with Varying Number of Erroneous Sequences: Recall vs Diameter")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrAlns_Recall.pdf",width = 6,height = 6)
+ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") ,])+
+  geom_boxplot()+#geom_point(alpha=0.5,size=1)+
+  theme_classic()+theme(legend.position = c(.15,.25),legend.direction = "vertical", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("FPR")+
+  scale_shape(name="")+scale_x_discrete(name="Error frequency")+
+  scale_color_brewer(palette = "Paired",name="Error Length")
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_FPR.pdf",width = 9,height = 4.5)
+
+
+# ROC for Hackett with varying error lengths and fixed percentage of erroneous sequences
+options(digits = 2)
+d2=summ_roc(d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns") ,], ErrLenT+n~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), n=d2$n, ErrLen=d2$ErrLenT)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), n=d2$n, ErrLen=d2$ErrLenT)
+ggplot(data=A, aes(x, y, color=as.factor(ErrLen), shape=n)) + geom_point(alpha=1)+
+  theme_light()+theme(legend.position = "right")+
+  scale_shape(name="Error Frequency")+scale_color_brewer(name="Error Length",palette = "Paired")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1))+
+  ggtitle("Hackett with Varying Error Lengths and Frequency: ROC")
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenFreq_ROC.pdf", width=6, height=6)
+
+# # ROC for Hackett with varying percentages of erroneous sequences and fixed error lengths
+# d2=d[d$E=="Hackett_NumErrAlns",]
+# d2$n=with(d2,as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)))
+# ggplot(aes(x=FP/(FP+TN),y=TP/(TP+FN), color=as.factor(n) ),data=summ_roc(d2,n~.))+
+#   geom_point(alpha=1)+
+#   theme_light()+theme(legend.position = c(.85,.25))+
+#   scale_color_brewer(name="n",labels=nlabels, palette="Paired")+
+#   scale_x_continuous(name="FPR",labels=percent)+scale_y_continuous("Recall")+
+#   ggtitle("Hackett with Varying Number of Erroneous Sequences: ROC")
+# ggsave("Figures/ErrParam_Figures/Hackett_NumErrAlns_ROC.pdf", width=6, height=6)
+
+# # Hackett - Varying error lengths and fixed percentage of erroneous sequences
+# ggplot(aes(x=Diameter,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="Hackett_ErrLen" & d$N > 19,])+
+#   geom_point(alpha=0.5)+theme_classic()+geom_smooth(se=F)+scale_y_continuous("Recall")+
+#   scale_shape(name="")+scale_color_brewer(palette = "Paired",name="error len")+
+#   ggtitle("Hackett with Varying Error Lengths: Recall vs Diameter")
+# ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall.pdf",width = 6,height = 6)
+# 
+# # Hackett - Varying percentage of erroneous sequences and fixed error lengths
+# ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)),
+#            color=as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)), shape=cut((FP/(FP+TN)),breaks=c(-1,0,0.001,0.1,1))),
+#        data=d[d$E=="Hackett_NumErrAlns" ,])+geom_point(alpha=0.5)+
+#   theme_classic()+geom_smooth(se=F)+scale_shape_manual(name="FPR",values=c(1,16,4))+
+#   scale_color_brewer(palette = "Paired",name="n",labels=nlabels)+
+#   scale_y_continuous(name="Recall")+coord_cartesian(ylim=c(0.35,1))+
+#   ggtitle("Hackett with Varying Number of Erroneous Sequences: Recall vs Diameter")
+# ggsave("Figures/ErrParam_Figures/Hackett_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
 
 
@@ -228,58 +291,6 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumE
   ggtitle("small-10-aa with Varying Number of Erroneous Sequences: Recall vs Diameter")
 ggsave("Figures/ErrParam_Figures/small10aa_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
-
-
-d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen") & d$N > 19 ,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
-A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A, aes(x, y, shape=as.factor(ErrLen), group=as.factor(DR),color=as.factor(DR))) +
-  geom_point(alpha=1)+geom_line()+
-  theme_bw()+theme(legend.position = "right")+
-  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)+
-  scale_shape_manual(name="Error Length",values=c(1,2,5,6,15,17,19),labels = function(x) (paste(x, intToUtf8(215), "11")))+
-  scale_color_brewer(name="Diameter",palette = "Dark2")+
-  scale_x_continuous(name="FPR",labels=percent)+
-  scale_y_continuous("Recall",labels=percent)
-ggsave("Figures/ErrParam_Figures/16SB_ErrLen_ROC.pdf", width=6, height=4.5)
-
-# ROC for 16S.B with varying percentages of erroneous sequences and fixed error lengths
-d2=d[d$E=="16S.B_NumErrAlns",]
-d2$n=with(d2,as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)))
-ggplot(aes(x=FP/(FP+TN),y=TP/(TP+FN), color=as.factor(n) ),data=summ_roc(d2,n~.))+
-  geom_point(alpha=1)+
-  theme_light()+theme(legend.position = c(.85,.25))+
-  scale_color_brewer(name="n",labels=nlabels, palette="Paired")+
-  scale_x_continuous(name="FPR",labels=percent)+scale_y_continuous("Recall")+
-  ggtitle("16S.B with Varying Number of Erroneous Sequences: ROC")
-ggsave("Figures/ErrParam_Figures/16SB_NumErrAlns_ROC.pdf", width=6, height=6)
-
-
-
-
-# ROC for Hackett with varying error lengths and fixed percentage of erroneous sequences
-options(digits = 2)
-d2=summ_roc(d[d$E=="Hackett_ErrLen" & d$N > 19 & d$ErrLen!=0,], ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
-A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A, aes(x, y, color=as.factor(ErrLen), shape=as.factor(DR))) + geom_point(alpha=1)+
-  theme_light()+theme(legend.position = "right")+geom_point(data=B)+
-  scale_shape(name="Diameter")+scale_color_brewer(name="Error Length",palette = "Paired",labels = function(x) (paste(x, intToUtf8(215), "11")))+
-  scale_x_continuous(name="FPR",labels=percent)+
-  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1))+
-  ggtitle("Hackett with Varying Error Lengths: ROC")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_ROC.pdf", width=6, height=6)
-
-# ROC for Hackett with varying percentages of erroneous sequences and fixed error lengths
-d2=d[d$E=="Hackett_NumErrAlns",]
-d2$n=with(d2,as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)))
-ggplot(aes(x=FP/(FP+TN),y=TP/(TP+FN), color=as.factor(n) ),data=summ_roc(d2,n~.))+
-  geom_point(alpha=1)+
-  theme_light()+theme(legend.position = c(.85,.25))+
-  scale_color_brewer(name="n",labels=nlabels, palette="Paired")+
-  scale_x_continuous(name="FPR",labels=percent)+scale_y_continuous("Recall")+
-  ggtitle("Hackett with Varying Number of Erroneous Sequences: ROC")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrAlns_ROC.pdf", width=6, height=6)
 
 # ROC for small-10-aa with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
