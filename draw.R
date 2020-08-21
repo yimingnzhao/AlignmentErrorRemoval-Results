@@ -34,7 +34,19 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),
            color=as.factor(NumErrSeqDiv)),data=d[d$E=="16S.B_K",])+geom_point(alpha=0.5)+
   theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
   scale_shape(name="")+scale_color_brewer(palette = "Paired",name="k")
-ggsave("Recall-k.pdf",width = 6,height = 6)
+ggsave("Figures/Union_Figures/Recall-k.pdf",width = 6,height = 6)
+
+options(digits = 2)
+d2=summ_roc(d[d$E=="16S.B_K" & d$N > 19 & d$ErrLen!=0,], NumErrSeqDiv+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), NumErrSeqDiv=d2$NumErrSeqDiv, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), NumErrSeqDiv=d2$NumErrSeqDiv, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A, aes(x, y, group=as.factor(NumErrSeqDiv),color=as.factor(NumErrSeqDiv), shape=as.factor(DR))) + geom_point(alpha=1)+
+  theme_light()+theme(legend.position = "right")+geom_line()+
+  scale_shape(name="Diameter")+scale_color_brewer(name=expression(k),palette = "Paired")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1))+
+  ggtitle("16S with varying k, fixed error length 88 and 5% error frequency")
+ggsave("Figures/Union_Figures/16S_ks_fixed_length_ROC.pdf", width=6, height=6)
 
 
 # General Results: Recall vs Diameter
