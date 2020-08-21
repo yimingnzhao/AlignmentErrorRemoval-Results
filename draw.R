@@ -29,6 +29,13 @@ summ_roc <- function(d2,form) {
   ad2
 }
 
+# 16S.B: K - Recall vs Diameter
+ggplot(aes(x=Diameter,y=TP/(TP+FN), 
+           color=as.factor(NumErrSeqDiv)),data=d[d$E=="16S.B_K",])+geom_point(alpha=0.5)+
+  theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
+  scale_shape(name="")+scale_color_brewer(palette = "Paired",name="k")
+ggsave("Recall-k.pdf",width = 6,height = 6)
+
 
 # General Results: Recall vs Diameter
 # Uses normal distribution to draw the error lengths and number of erroneuous sequences
