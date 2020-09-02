@@ -254,6 +254,28 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_Er
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_Diameter.pdf",width = 9,height = 5)
 
 
+ggplot(aes(x=SL,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+  stat_summary(position = position_dodge(width=0.01))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
+  scale_shape(name="")+#scale_x_discrete(name="Gene")+
+  scale_color_brewer(palette = "Paired",name="Error Length")+
+  geom_text(aes(label=DR,y=0.3),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
+            position = position_jitter(width = 0,height = 0.07))
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_SL.pdf",width = 9,height = 5)
+
+ggplot(aes(x=as.numeric(as.character(N)),y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+  stat_summary(position = position_dodge(width=0.01))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
+  scale_shape(name="")+#scale_x_discrete(name="Gene")+
+  scale_color_brewer(palette = "Paired",name="Error Length")+
+  geom_text(aes(label=DR,y=0.3),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
+            position = position_jitter(width = 0,height = 0.07))
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_N.pdf",width = 9,height = 5)
+
 ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   geom_boxplot()+#geom_point(alpha=0.5,size=1)+
   theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
