@@ -27,8 +27,6 @@ AA_DATA = ["F", "F",
         "G", "G", "G", "G",
 ]
 
-
-
 """
 Checks if an input string is an integer
 
@@ -132,7 +130,7 @@ def getErrSequences( length, size, chars_in_each_seq, err_len ):
     for i in range( length ):
         while True:
             rand_seq_idx = random.randint( 0, count - 1 );
-            if not (rand_seq_idx in sequence_errs):
+            if not (valid_seq[rand_seq_idx] + 1 in sequence_errs):
                 sequence_errs.append( valid_seq[rand_seq_idx] + 1 );
                 break;
     sequence_errs.sort( reverse=True );
@@ -275,12 +273,14 @@ sys.stderr.write("Chars in Alignment: " + str(chars_in_alignment) + "\n");
 
 if ( num_alignments < num_erroneous_alignments ):
     num_erroneous_alignments = num_alignments;
+    print("NumErrSeq param too large. Inserting errors into all sequences...")
 
 # Creates file with alignment sequence errors
 f = open( reformat_file, "r" );
 error_f = open( error_file, "a" );
 pos_f = open( err_pos_file, "a" )
 sequence_errs = getErrSequences( num_erroneous_alignments, num_alignments, chars_in_each_sequence, sequence_error_len );
+
 count = 0;
 with open( reformat_file, "r" ) as file_object:
     for line in file_object:
@@ -298,6 +298,7 @@ with open( reformat_file, "r" ) as file_object:
                 open(reformat_file, 'w').close()
                 open(error_file, 'w').close()
                 open(err_pos_file, 'w').close()
+		print("Error setting error sequence, exiting...")
                 sys.exit()
             error_f.write( sequence[0] );
             pos_f.write( sequence[1] )
