@@ -151,14 +151,28 @@ ggplot(aes(x=DR,y=FN/(FN+TN),group=interaction(n,ErrLenT,sep=", "),color=interac
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   stat_summary(position = position_dodge(width=0.3),geom="linerange",size=0.8)+
   stat_summary(position = position_dodge(width=0.3),geom="line")+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  scale_y_sqrt("Percent error",labels=percent)+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Percent error",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_linetype_manual(name="",values=c(1,3))+
   stat_summary(aes(y=(FN+TP)/(FN+FP+TP+TN),linetype="Before filtering"),position = position_dodge(width=0.3),alpha=0.99,geom="line")+
   scale_color_brewer(palette = "Paired",name="Error Length")
 ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror.pdf",width = 9,height = 4.5)
+
+
+ggplot(aes(x=DR,y=(FN+TP)/(FN+FP+TP+TN),group=interaction(n,ErrLenT,sep=", "),color=interaction(n,ErrLenT,sep=", ")),
+       data=d[d$E %in% c( "16S.B_NumErrAlns") & d$N > 19,])+
+  #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
+  stat_summary(position = position_dodge(width=0.3),geom="linerange",size=0.8)+
+  stat_summary(position = position_dodge(width=0.3),geom="line")+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Percent error before filtering: (FN+TP)/(FN+FP+TP+TN)",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="")+
+  scale_color_brewer(palette = "Paired",name="Error Length")
+ggsave("debug.pdf")
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
        data=d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])+
