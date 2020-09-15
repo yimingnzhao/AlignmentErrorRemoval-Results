@@ -254,7 +254,7 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_Er
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_Diameter.pdf",width = 9,height = 5)
 
 
-ggplot(aes(x=SL,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=SL,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
