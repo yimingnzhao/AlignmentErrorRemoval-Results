@@ -1,8 +1,9 @@
 require(ggplot2); require(scales); require(reshape2)
-d=(read.csv("./CSV_Files/res.csv", sep=",", header=F))
+d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 d=d[d$E!="small-10-aa_NumErrAlns",]
 nlabels = c("1","2%","5%","10%","20%")
+levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
 
 d$n=with(d,as.factor(round(100/((NumErrSeqDiv==0&grepl("ErrLen$",E))*20+(NumErrSeqDiv!=N|grepl("ErrLen$",E))*NumErrSeqDiv+(NumErrSeqDiv==N&!grepl("ErrLen$",E))*100))))
 d$nb=d$n
@@ -231,41 +232,41 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumE
 ggsave("Figures/ErrParam_Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
 
-ggplot(aes(x=reorder(DR,TP/(TP+FN)),y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.6))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Frequency")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall.pdf",width = 9,height = 5)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall.pdf",width = 9,height = 6)
 
-ggplot(aes(x=Diameter,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=Diameter,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" ,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Frequency")+
-  geom_text(aes(label=DR,y=0.5),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
-            position = position_jitter(width = 0,height = 0.06))
-ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall_vs_Diameter.pdf",width = 9,height = 5)
+  geom_text(aes(label=DR,y=rep(c(0.6,0.94,0.62,0.65,0.96),4)),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
+            position = position_jitter(width = 0,height = 0.04),color="black")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall_vs_Diameter.pdf",width = 9,height = 5.5)
 
 
-ggplot(aes(x=SL,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=SL,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concat",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Frequency")+
-  geom_text(aes(label=DR,y=0.5),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
-            position = position_jitter(width = 0,height = 0.06))
+  geom_text(aes(label=DR,y=rep(c(0.94,0.58,0.64,0.62,0.96),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concat" & d$n=="2%" &d$Rep==1,],
+            position = position_jitter(width = 0,height = 0.03),color="black")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall_vs_SL.pdf",width = 9,height = 5)
 
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
-                     -(FN+TP)/(FN+FP+TP+TN)-FN/(FN+TN)
+                     -(FN+TP)/(FN+FP+TP+TN)#-FN/(FN+TN)
                      #SL*as.numeric(as.character(N))
                      #Diameter
                      ),y=FN/(FN+TN),group=ErrLenT,color=ErrLenT,linetype="After filtering"),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
@@ -278,21 +279,21 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   scale_linetype_manual(name="",values=c(1,3))+
   stat_summary(aes(y=(FN+TP)/(FN+FP+TP+TN),linetype="Before filtering"),position = position_dodge(width=0.3),alpha=0.9,geom="line")+
   scale_color_brewer(palette = "Dark2",name="Error Length")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErr_percenterror.pdf",width = 8,height = 6.5)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErr_percenterror.pdf",width = 9,height = 6.5)
 
-ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"), -FN/(FN+TN)),y=(FN+10^-8)/(FN+TN),group=ErrLenT,color=ErrLenT,linetype="After filtering"),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"), -(FN+TP)/(FN+FP+TP+TN)),y=(FN)/(FN+TN),group=ErrLenT,color=ErrLenT,linetype="After filtering"),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   stat_summary(position = position_dodge(width=0.3),geom="linerange",size=0.2)+
   stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  scale_y_sqrt("Percent error",labels=percent,breaks=c(.1,.3,0.5,1,2,3,4)*0.01)+
+  scale_y_sqrt("Percent error",labels=percent,breaks=c(.1,.2,.3,0.5,1,2,3,4)*0.01)+
   scale_shape(name="")+scale_x_discrete(name="Gene")+
   scale_linetype_manual(name="",values=c(1,3))+
   stat_summary(aes(y=(FN+TP)/(FN+FP+TP+TN),linetype="Before filtering"),position = position_dodge(width=0.3),alpha=0.9,geom="line")+
   scale_color_brewer(palette = "Dark2",name="Error Length")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErr_percenterror_sqrt.pdf",width = 8,height = 6.5)
 
-ggplot(aes(x=reorder(DR,TP/(TP+FN)),y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   stat_summary(position = position_dodge(width=0.7))+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
@@ -300,7 +301,7 @@ ggplot(aes(x=reorder(DR,TP/(TP+FN)),y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Ha
   scale_shape(name="")+scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Length")
   #scale_fill_brewer(palette = "Spectral",name="Error Length")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall.pdf",width = 9,height = 5)
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall.pdf",width = 9,height = 6)
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
@@ -314,14 +315,14 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_Er
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_Diameter.pdf",width = 9,height = 5)
 
 
-ggplot(aes(x=SL,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=SL,y=TP/(TP+FN),color=ErrLenT),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concat"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Length")+
-  geom_text(aes(label=DR,y=0.3),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
+  geom_text(aes(label=DR,y=0.3),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concat" & d$n=="2%" &d$Rep==1,],
             position = position_jitter(width = 0,height = 0.07))
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_SL.pdf",width = 9,height = 5)
 
