@@ -14,10 +14,10 @@ levels(d$n) <- c(levels(d$n)[1],paste(levels(d$n)[0:-1],"%",sep=""),"~5%")
 d[grepl("General$",d$E),"n"]="~5%"
 
 d$ErrLen = (d$ErrLen==0)*8+d$ErrLen
-d$ErrLenT = paste(d$ErrLen, intToUtf8(215), "11",sep="")
+d$ErrLenT = paste(d$ErrLen, intToUtf8(215), ifelse(grepl("small",d$E),"7","11"),sep="")
 #d[grepl("small",d$E),]$ErrLenT = paste(d[grepl("small",d$E),]$ErrLen, intToUtf8(215), "4",sep="")
 d[grepl("General$",d$E),"ErrLenT"]="~50"
-d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","3×11", "4×11", "8×11", "16×11", "32×11", "64×11","2×4","3×4", "4×4", "8×4", "16×4","~50" ))
+d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","2×7","3×11", "3×7","4×11", "4×7","8×11", "8×7","16×11","16×7", "32×11", "32×7","64×11","~50" ))
 
 d$SL = with(d,(TN+FP+FN+TP)/as.numeric(as.character(N)))
 
@@ -329,7 +329,7 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   scale_shape(name="")+scale_x_discrete(name="")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   scale_color_brewer(palette = "Paired",name="Error Length / Freq")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrNumErrAlns_percenterror_arrow_log.pdf",width = 9,height =9)
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErrAlns_percenterror_arrow_log.pdf",width = 9,height =9)
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
                      -(FN+TP)/(FN+FP+TP+TN)),
@@ -344,7 +344,7 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   scale_shape(name="")+scale_x_discrete(name="")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   scale_color_brewer(palette = "Paired",name="Error Length / Freq")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrNumErrAlns_percenterror_arrow.pdf",width = 9,height =9)
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErrAlns_percenterror_arrow.pdf",width = 9,height =9)
 
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"), -(FN+TP)/(FN+FP+TP+TN)),y=(FN)/(FN+TN),group=ErrLenT,color=ErrLenT,linetype="After filtering"),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
@@ -467,28 +467,41 @@ ggsave("Figures/ErrParam_Figures/Hackett_ErrLenFreq_ROC.pdf", width=6, height=6)
 
 ggplot(aes(x=n,y=TP/(TP+FN),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns") ,])+
   geom_boxplot()+
-  theme_classic()+theme(legend.position = c(.75,.15),legend.direction = "vertical", legend.text.align = 1)+
+  theme_classic()+theme(legend.position = c(.85,.25),legend.direction = "vertical", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
-  scale_shape(name="")+
+  scale_shape(name="")+scale_x_discrete(name="Error Frequency")+
   scale_color_brewer(palette = "Paired",name="")
-ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_Recall.pdf",width = 9,height = 4.5)
+ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_Recall.pdf",width = 5,height = 4.5)
 
-ggplot(aes(x=n,y=FP/(TP+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
+ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
   geom_boxplot()+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR",labels=percent)+
-  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
+  theme_classic()+theme(legend.position = c(.85,.85),legend.direction = "vertical", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR",labels=percent)+scale_x_discrete(name="Error Frequency")+
+  scale_shape(name="")+#facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="")
-ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FDR.pdf",width = 9,height = 4.5)
+ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FDR.pdf",width = 5,height = 4.5)
 
-ggplot(aes(x=n,y=FP/(TN+FP),color=interaction(n,ErrLen,sep="%, ")),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
+ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
   geom_boxplot()+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR",labels=percent)+
-  scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="")
-ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 9,height = 4.5)
+  theme_classic()+theme(legend.position =  c(.85,.85),legend.direction = "vertical", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("FPR",labels=percent)+
+  scale_shape(name="")+#facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
+  scale_color_brewer(palette = "Paired",name="")+scale_x_discrete(name="Error Frequency")
+ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
+
+ggplot(aes(x=interaction(ErrLenT,n,sep=", "),xend=interaction(ErrLenT,n,sep=", "),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
+       data=data.table::dcast(setDT(d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),]),ErrLenT+n+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+  #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
+  geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  #stat_summary(position = position_dodge(width=0.3),geom="line")+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_log10("Percent error",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="Error Len, Freq.")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x")+
+  scale_color_brewer(palette = "Paired",name="Error Length")
+ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_percenterror_arrow_log.pdf",width = 7.5,height =4)
 
 # # small-10-aa - Varying error lengths and fixed percentage of erroneous sequences
 # ggplot(aes(x=n,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="small-10-aa_ErrLen" ,])+
