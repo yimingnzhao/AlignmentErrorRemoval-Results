@@ -327,7 +327,7 @@ ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_Diameter.pdf",wi
 
 ggplot(aes(x=SL,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
        data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$DR != "concat",])+
-  stat_summary(position = position_dodge(width=0.01))+
+  stat_summary(position = position_dodge(width=0.01),alpha=0.8)+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
@@ -336,12 +336,12 @@ ggplot(aes(x=SL,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
             position = position_jitter(width = 0,height = 0.05),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL.pdf",width = 9,height = 8)
+#ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL.pdf",width = 9,height = 8)
 
 
-ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
+ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", "),gropu=interaction(DR,ErrLenT,n,sep=", ")),
        data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$DR != "concat",])+
-  stat_summary(position = position_dodge(width=0.01))+
+  stat_summary(position = position_dodge(width=0.01),alpha=0.75)+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
@@ -350,7 +350,7 @@ ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
             position = position_jitter(width = 0,height = 0.05),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N.pdf",width = 9,height = 8)
+#ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N.pdf",width = 9,height = 8)
 
 
 
@@ -472,23 +472,6 @@ ggplot(aes(x=as.numeric(as.character(N)),y=TP/(TP+FN),color=ErrLenT),data=d[d$E 
   geom_text(aes(label=DR,y=0.3),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concatenation" & d$n=="2%" &d$Rep==1,],
             position = position_jitter(width = 0,height = 0.07))
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLen_Recall_vs_N.pdf",width = 9,height = 5)
-
-ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
-  geom_boxplot()+#geom_point(alpha=0.5,size=1)+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  geom_smooth(se=F,method="lm")+scale_y_continuous("FDR",labels=percent)+
-  scale_shape(name="")+scale_x_discrete(name="Error frequency")+
-  scale_color_brewer(palette = "Paired",name="Error Length")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_FDR.pdf",width = 5,height = 4.5)
-
-
-ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
-  geom_boxplot()+#geom_point(alpha=0.5,size=1)+
-  theme_classic()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  geom_smooth(se=F,method="lm")+scale_y_continuous("FPR",labels=percent)+
-  scale_shape(name="")+scale_x_discrete(name="Error frequency")+
-  scale_color_brewer(palette = "Paired",name="Error Length")
-ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
 
 # ROC for Hackett with varying error lengths and fixed percentage of erroneous sequences
