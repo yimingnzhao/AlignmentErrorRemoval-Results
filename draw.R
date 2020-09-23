@@ -235,7 +235,7 @@ ggplot(aes(x=Diameter,y=FP/(FP+TN),color=interaction(ErrLenT,n,sep=", ")),data=d
   theme_classic()+theme(legend.position ="bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth()+scale_y_continuous("FPR",labels=percent)+
   scale_shape(name="")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="", labels = function(x) (paste(sub("1%","  1",x), intToUtf8(215), "11",sep="")))
+  scale_color_brewer(palette = "Paired",name="")
 ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_FPR.pdf",width = 9,height = 4.5)
 
 
@@ -259,6 +259,12 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN), group= as.factor(100/((NumErrSeqDiv!=N)*NumE
   ggtitle("16S.B with Varying Number of Erroneous Sequences: Recall vs Diameter")
 ggsave("Figures/ErrParam_Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height = 6)
 
+
+
+
+
+
+############################## Hacket
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.6))+
@@ -308,6 +314,38 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   stat_summary(aes(y=(FN+TP)/(FN+FP+TP+TN),linetype="Before filtering"),position = position_dodge(width=0.3),alpha=0.9,geom="line")+
   scale_color_brewer(palette = "Dark2",name="Error Length")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErr_percenterror.pdf",width = 9,height = 6.5)
+
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
+                     -(FN+TP)/(FN+FP+TP+TN)),
+           xend=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
+                        -(FN+TP)/(FN+FP+TP+TN)),
+           yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
+       data=data.table::dcast(setDT(d[ (d$E =="Hackett_Genes_ErrLen" | d$E=="Hackett_Genes_NumErrAlns") &d$ErrLen<64,]),ErrLenT+n+SL+N+Diameter+DR+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+  geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_log10("Percent error",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Length / Freq")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrNumErrAlns_percenterror_arrow_log.pdf",width = 9,height =9)
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
+                     -(FN+TP)/(FN+FP+TP+TN)),
+           xend=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
+                        -(FN+TP)/(FN+FP+TP+TN)),
+           yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
+       data=data.table::dcast(setDT(d[ (d$E =="Hackett_Genes_ErrLen" | d$E=="Hackett_Genes_NumErrAlns") &d$ErrLen<64,]),ErrLenT+n+SL+N+Diameter+DR+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+  geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Percent error",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Length / Freq")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrNumErrAlns_percenterror_arrow.pdf",width = 9,height =9)
+
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"), -(FN+TP)/(FN+FP+TP+TN)),y=(FN)/(FN+TN),group=ErrLenT,color=ErrLenT,linetype="After filtering"),data=d[d$E =="Hackett_Genes_ErrLen" &d$DR != "concatenation"&d$ErrLen<64,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
