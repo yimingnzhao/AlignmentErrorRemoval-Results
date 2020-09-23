@@ -32,18 +32,31 @@ for file in $1/*; do
 	num_alignments=$((`wc -l < chosen_sequences.fasta` / 2))
 	num_err_aln_divisor_arr=($num_alignments 50 20 10 5)	
 
+
+
+	julia-1.1.1/bin/julia correction.jl -k 5 -m X -a N -n chosen_sequences.fasta > OUTPUT1 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 9 -m X -a N -n chosen_sequences.fasta > OUTPUT2 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 17 -m X -a N -n chosen_sequences.fasta > OUTPUT3 2> /dev/null
+	python unionK.py OUTPUT2 OUTPUT3 9 6
+	mv OUTPUT OUTPUT_ALL
+	python unionK.py OUTPUT1 OUTPUT_ALL 5 6
+	rm OUTPUT_ALL
+	mv OUTPUT ORIGINAL
+
+
 	# Loops through the number of alignment divisors array and then the number of repititions for each divisor
 	for (( i=0; i<${#num_err_aln_divisor_arr[@]}; i++ )); do
 		num_err_aln_divisor=${num_err_aln_divisor_arr[$i]}
 		for (( j=0; j<$repititions; j++ )); do
 			description="$aln_file:no_error\terroneous_alignments_num_divisor:$num_err_aln_divisor\trepitition:$j"	
-			julia-1.1.1/bin/julia correction.jl -k $value_of_k -m X -a N -n chosen_sequences.fasta > OUTPUT 2> /dev/null
+
+
 			cp chosen_sequences.fasta TEMP	
-			python getErrorRates.py chosen_sequences.fasta TEMP OUTPUT $description 2> DESCRIPTION_FILE
+			python getErrorRates.py chosen_sequences.fasta TEMP ORIGINAL $description 2> DESCRIPTION_FILE
 			description=$(head -n 1 DESCRIPTION_FILE)
 			description=$(cat DESCRIPTION_FILE | sed -e "s/\t/\\\t/g")	
 			echo $description
-			rm TEMP OUTPUT
+			rm TEMP OUTPUT*
 
 			echo "Generating error model for the number of error alignments divisor $num_err_aln_divisor, repitition $j..."
 			python generateErrorModel.py chosen_sequences.fasta $(($num_alignments / $num_err_aln_divisor + 1)) $(($value_of_k * $len_of_err_multiplier)) $data
@@ -57,11 +70,15 @@ for file in $1/*; do
 			rm OUTPUT_ALL
 			
 			echo "Getting error rates for the correction algorithm..."
-			python getErrorRates.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+			python getErrorRates-filtered.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+			file_description=$(cat DESCRIPTION_FILE | sed -e "s/\//_/g" -e "s/.fasta//g" -e "s/\t/_/g" -e "s/chosen_alignments_repitition/rep/g" -e "s/:no_error/_errlen8/g" -e "s/erroneous_alignments_num_divisor:/numseqdiv/g" -e "s/repitition:/rep/g")
+			cp position.fasta "ERR_FILES/${file_description}_pos.fasta"
+			cp error.fasta "ERR_FILES/${file_description}_err.fasta"
+			cp OUTPUT "ERR_FILES/${file_description}_res.fasta"
 			rm reformat.fasta error.fasta position.fasta OUTPUT*
 		done
 	done
-	rm chosen_sequences.fasta
+	rm chosen_sequences.fasta ORIGINAL
 
 done
 

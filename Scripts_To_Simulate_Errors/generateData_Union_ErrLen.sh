@@ -30,22 +30,35 @@ format_output_file="FORMATTED_OUTPUT"
 
 for file in $1/*; do
 	aln_file=$file
+	
+	python chooseSequences.py $aln_file $number_of_alignments
+
+	julia-1.1.1/bin/julia correction.jl -k 5 -m X -a N -n chosen_sequences.fasta > OUTPUT1 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 9 -m X -a N -n chosen_sequences.fasta > OUTPUT2 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 17 -m X -a N -n chosen_sequences.fasta > OUTPUT3 2> /dev/null
+	python unionK.py OUTPUT2 OUTPUT3 9 6
+	mv OUTPUT OUTPUT_ALL
+	python unionK.py OUTPUT1 OUTPUT_ALL 5 6
+	rm OUTPUT_ALL
+
+	mv OUTPUT ORIGINAL
+
 	# Loops through the length of errors multiplier array and then the number of repititions for each multiplier
 	for (( i=0; i<${#len_of_err_multiplier_arr[@]}; i++ )); do
 		err_len_multiplier=${len_of_err_multiplier_arr[$i]}
 		echo "Choosing alignments from $aln_file for the error length multiplier $err_len_multiplier..."
-		python chooseSequences.py $aln_file $number_of_alignments
 		for (( j=0; j<$repititions; j++ )); do
 			
 			# Runs algorithm before inserting errors
 			description="$aln_file\terror_length_multipler:$err_len_multiplier\trepitition:$j"
-			julia-1.1.1/bin/julia correction.jl -k $value_of_k -m X -a N chosen_sequences.fasta > OUTPUT 2> /dev/null
+
+
 			cp chosen_sequences.fasta TEMP
-			python getErrorRates.py chosen_sequences.fasta TEMP OUTPUT $description 2> DESCRIPTION_FILE
+			python getErrorRates.py chosen_sequences.fasta TEMP ORIGINAL $description 2> DESCRIPTION_FILE
 			description=$(head -n 1 DESCRIPTION_FILE)
 			description=$(cat DESCRIPTION_FILE | sed -e "s/\t/\\\t/g")	
 			echo $description
-			rm TEMP OUTPUT
+			rm TEMP OUTPUT*
 
 			len_of_err=`awk -v k=$value_of_k -v mult=$err_len_multiplier 'BEGIN { printf("%.0f", k * mult); }'`
 			echo "Generating error model for the error length multiplier $err_len_multiplier, repitition $j..."
@@ -61,11 +74,16 @@ for file in $1/*; do
 			rm OUTPUT_ALL
 			
 			echo "Getting error rates for the correction algorithm..."
-			python getErrorRates.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+			file_description=$(cat DESCRIPTION_FILE | sed -e "s/\//_/g" -e "s/.fasta//g" -e "s/\t/_/g" -e "s/chosen_alignments_repitition/rep/g" -e "s/error_length_multipler:/errlen/g" -e "s/repitition:/numseqdiv20_rep/g")
+			echo "Getting error rates for the correction algorithm..."
+			python getErrorRates-filtered.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+			cp position.fasta "ERR_FILES/${file_description}_pos.fasta"
+			cp error.fasta "ERR_FILES/${file_description}_err.fasta"
+			cp OUTPUT "ERR_FILES/${file_description}_res.fasta"
 			rm reformat.fasta error.fasta position.fasta OUTPUT*
 		done
-		rm chosen_sequences.fasta
 	done
+	rm chosen_sequences.fasta ORIGINAL
 done
 
 
