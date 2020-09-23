@@ -3,7 +3,8 @@ require(data.table)
 require(reshape2)
 d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
-d= d[d$NumErrSeqDiv!=722,]
+d = d[d$NumErrSeqDiv!=722,]
+d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
 d=d[d$E!="small-10-aa_NumErrAlns",]
 nlabels = c("1","2%","5%","10%","20%")
 levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
@@ -309,28 +310,49 @@ ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall.pdf",width = 9,height = 6
 
 
 
-ggplot(aes(x=Diameter,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" ,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
+ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns"),])+
   stat_summary(position = position_dodge(width=0.01))+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
-  scale_color_brewer(palette = "Paired",name="Error Frequency")+
-  geom_text(aes(label=DR,y=rep(c(0.6,0.94,0.62,0.65,0.96),4)),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
-            position = position_jitter(width = 0,height = 0.04),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall_vs_Diameter.pdf",width = 9,height = 5.5)
-
-
-ggplot(aes(x=SL,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concat",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
-  stat_summary(position = position_dodge(width=0.01))+
-  #geom_point(alpha=0.5,size=1)+
-  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
-  geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
-  scale_shape(name="")+#scale_x_discrete(name="Gene")+
-  scale_color_brewer(palette = "Paired",name="Error Frequency")+
-  geom_text(aes(label=DR,y=rep(c(0.94,0.58,0.64,0.62,0.96),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns" &d$DR != "concat" & d$n=="2%" &d$Rep==1,],
+  scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  geom_text(aes(label=DR,y=rep(c(0.24,0.43,0.52,0.28,0.34),4)),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
             position = position_jitter(width = 0,height = 0.03),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall_vs_SL.pdf",width = 9,height = 5)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_Diameter.pdf",width = 9,height = 8)
+
+
+
+ggplot(aes(x=SL,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$DR != "concat",])+
+  stat_summary(position = position_dodge(width=0.01))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
+  scale_shape(name="")+scale_x_continuous(name="Sequence Length")+
+  scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
+            position = position_jitter(width = 0,height = 0.05),color="black")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL.pdf",width = 9,height = 8)
+
+
+ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$DR != "concat",])+
+  stat_summary(position = position_dodge(width=0.01))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
+  scale_shape(name="")+scale_x_continuous(name="Sequence count")+
+  scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
+            position = position_jitter(width = 0,height = 0.05),color="black")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N.pdf",width = 9,height = 8)
+
+
 
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
@@ -471,7 +493,7 @@ ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErr_FPR.pdf",width = 5,height 
 
 # ROC for Hackett with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
-d2=summ_roc(d[d$E %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,], ErrLenT+n~.)
+d2=summ_roc(d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_General","Hackett_Genes_NumErrAlns") ,], ErrLenT+n~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), n=d2$n, ErrLen=d2$ErrLenT)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), n=d2$n, ErrLen=d2$ErrLenT)
 ggplot(data=A, aes(x, y, color=ErrLen, shape=n)) + geom_point(alpha=1)+
@@ -479,9 +501,18 @@ ggplot(data=A, aes(x, y, color=ErrLen, shape=n)) + geom_point(alpha=1)+
   scale_shape(name="Error Frequency")+scale_color_brewer(name="Error Length",palette = "Paired")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
-  #geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=ErrLen,shape=n),data=B,linetype=1,size=1,alpha=0.1)
-  ggtitle("Hackett with Varying Error Lengths and Frequency: ROC")
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLenFreq_ROC.pdf", width=6, height=6)
+
+options(digits = 2)
+d2=summ_roc(d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_General","Hackett_Genes_NumErrAlns") ,], ErrLenT+n+DR~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), n=d2$n, ErrLen=d2$ErrLenT)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), n=d2$n, ErrLen=d2$ErrLenT)
+ggplot(data=A, aes(x, y, color=ErrLen, shape=n)) + geom_point(alpha=1)+
+  theme_light()+theme(legend.position = "right")+
+  scale_shape(name="Error Frequency")+scale_color_brewer(name="Error Length",palette = "Paired")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent)+
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenFreq_ROC_genes.pdf", width=8, height=6)
 
 # # ROC for Hackett with varying percentages of erroneous sequences and fixed error lengths
 # d2=d[d$E=="Hackett_NumErrAlns",]
