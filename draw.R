@@ -266,6 +266,38 @@ ggsave("Figures/ErrParam_Figures/16S.B_NumErrAlns_Recall.pdf",width = 6,height =
 
 ############################## Hacket
 
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c("Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$ErrLen<64,])+
+  stat_summary(position = position_dodge(width=0.6))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Recall",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="Gene")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Frequency")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall.pdf",width = 9,height = 8)
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=FP/(TP+FP),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c("Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$ErrLen<64,])+
+  stat_summary(position = position_dodge(width=0.6))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("FDR",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="Gene")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Frequency")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_FDR.pdf",width = 9,height = 8)
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=FP/(TN+FP),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c("Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") & d$ErrLen<64,])+
+  stat_summary(position = position_dodge(width=0.6))+
+  #geom_point(alpha=0.5,size=1)+
+  theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("FPR",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="Gene")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Frequency")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_FPR.pdf",width = 9,height = 8)
+
+
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),TP/(TP+FN)),y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns",])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.6))+
   #geom_point(alpha=0.5,size=1)+
@@ -274,6 +306,8 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   scale_shape(name="")+scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Frequency")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall.pdf",width = 9,height = 6)
+
+
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=n),data=d[d$E =="Hackett_Genes_NumErrAlns" ,])+ # %in% c( "Hackett_ErrLen","Hackett_NumErrAlns","Hackett_General") ,])+
   stat_summary(position = position_dodge(width=0.01))+
@@ -330,6 +364,20 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   scale_color_brewer(palette = "Paired",name="Error Length / Freq")
 ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErrAlns_percenterror_arrow_log.pdf",width = 9,height =9)
+
+
+ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
+                     -(FN+TP)/(FN+FP+TP+TN)),
+           y=(FN+TN)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
+       data=d[ (d$E =="Hackett_Genes_ErrLen" | d$E=="Hackett_Genes_NumErrAlns") &d$ErrLen<64,])+
+  stat_summary(position = position_dodge(width=0.8))+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Alignment size reduction",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_color_brewer(palette = "Paired",name="Error Length / Freq")
+ggsave("Figures/ErrParam_Figures/Hackett_ErrLenNumErrAlns_sizechange.pdf",width = 9,height =9)
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
                      -(FN+TP)/(FN+FP+TP+TN)),
