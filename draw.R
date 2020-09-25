@@ -5,7 +5,6 @@ d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 d = d[d$NumErrSeqDiv!=722,]
 d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
-d=d[d$E!="small-10-aa_NumErrAlns",]
 nlabels = c("1","2%","5%","10%","20%")
 levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
 
@@ -91,14 +90,14 @@ ggsave("Figures/ErrParam_Figures/All_both_ROC.pdf", width=6, height=10)
 
 
 
-
+d$DR2 = cut(d$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
 # 16S.B - Varying both
 
 # ROC for 16S.B with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
-d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns", "16S.B_General") & d$N > 19 ,], n+ErrLenT+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
-A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLenT=d2$ErrLenT,  n=d2$n, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), n=d2$n, ErrLenT=d2$ErrLenT, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns", "16S.B_General") & d$N > 19 ,], n+ErrLenT+DR2~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLenT=d2$ErrLenT,  n=d2$n, DR=d2$DR2)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), n=d2$n, ErrLenT=d2$ErrLenT, DR=d2$DR2)
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
   geom_path(aes(group=interaction(DR,n)),data=A[A$n!="~5%",],linetype=1)+
@@ -114,13 +113,13 @@ ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC.pdf", width=6.6, height=5
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
   geom_path(aes(group=DR),data=A[A$n!="~5%",],linetype=1)+
-  theme_bw()+theme(legend.position = "bottom",legend.text.align = 1)+
-  scale_shape_manual(name="",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
+  theme_classic()+theme(legend.position = c(0.7,0.2),legend.text.align = 1,legend.direction = "horizontal")+
+  scale_shape_manual(name="Err Len, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
   scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+facet_wrap(~ErrLenT=="8×11",labeller = function(x) list(c("Changing Error Length", "Changing Error Frequency")))+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
-ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC_faceted.pdf", width=10, height=6)
+ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC_faceted.pdf", width=10, height=5.3)
 
 
 
@@ -168,18 +167,18 @@ ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror.pdf",width = 9,
 
 
 
-ggplot(aes(x=DR,xend=DR,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
-       data=data.table::dcast(setDT(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,]),ErrLenT+n+DR+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+ggplot(aes(color=DR2,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=interaction(ErrLenT,n,sep=", "),xend=interaction(ErrLenT,n,sep=", ")),
+       data=data.table::dcast(setDT(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,]),ErrLenT+n+DR2+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
-  geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
-  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  theme(legend.position = c(.27,.1),legend.direction = "horizontal", legend.text.align = 1)+
   scale_y_log10("Percent error",labels=percent)+
-  scale_shape(name="")+scale_x_discrete(name="Diameter")+
-  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="Error Length")
-ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",width = 10,height =6)
+  scale_shape(name="")+scale_x_discrete(name="Error Len, Freq")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
+  scale_color_brewer(palette = "Dark2",name="Diameter")+#geom_hline(yintercept = 0.0026)
+ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",width = 10,height =5.3)
 
 ggplot(aes(x=DR,xend=DR,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
        data=data.table::dcast(setDT(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,]),ErrLenT+n+DR+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
@@ -189,8 +188,8 @@ ggplot(aes(x=DR,xend=DR,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interactio
   scale_y_sqrt("Percent error",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Diameter")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="Error Length")
-ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_sqrt.pdf",width = 10,height =6)
+  scale_color_brewer(palette = "Paired",name="Error Len, Freq")
+ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_sqrt.pdf",width = 10,height =5.5)
 
 ggplot(aes(x=DR,xend=DR,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interaction(ErrLenT,n,sep=", ")),
        data=data.table::dcast(setDT(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,]),ErrLenT+n+DR+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
@@ -200,8 +199,8 @@ ggplot(aes(x=DR,xend=DR,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),color=interactio
   scale_y_continuous("Percent error",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Diameter")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
-  scale_color_brewer(palette = "Paired",name="Error Length")
-ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow.pdf",width = 10,height =6)
+  scale_color_brewer(palette = "Paired",name="Error Len, Freq")
+ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow.pdf",width = 10,height =5.5)
 
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
@@ -565,6 +564,18 @@ ggplot(aes(x=interaction(ErrLenT,n,sep=", "),xend=interaction(ErrLenT,n,sep=", "
   scale_color_brewer(palette = "Paired",name="Error Length")
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_percenterror_arrow_log.pdf",width = 7.5,height =4)
 
+ggplot(aes(x=interaction(ErrLenT,n,sep=", "),
+           y=(FN+TN)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
+       data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
+  stat_summary(position = position_dodge(width=0.8))+
+  theme_classic()+
+  theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_continuous("Alignment size reduction",labels=percent)+
+  scale_shape(name="")+scale_x_discrete(name="")+
+  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x")+
+  scale_color_brewer(palette = "Paired",name="Error Length / Freq")
+ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErrAlns_sizechange.pdf",width = 7.5,height =4)
+
 # # small-10-aa - Varying error lengths and fixed percentage of erroneous sequences
 # ggplot(aes(x=n,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="small-10-aa_ErrLen" ,])+
 #   geom_point(alpha=0.5)+theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
@@ -646,6 +657,7 @@ ggplot(data=A, aes(x, y, color=as.factor(DR))) + geom_point(alpha=1)+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,0.9,0.95,1,1.1))+ggtitle("small-10-aa: ROC")
 ggsave("Figures/General_Figures/small10aa_General_ROC.pdf", width=6, height=6)
+
 
 
 
