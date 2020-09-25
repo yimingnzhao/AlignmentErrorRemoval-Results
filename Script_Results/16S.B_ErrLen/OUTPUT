@@ -2643,10 +2643,7 @@
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.458879_meanPairDist0.160409_leaves943.fasta\terror_length_multipler:32\trepitition:0\t199\t0\t0\t1372238	191	197	2971	1367113
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.458879_meanPairDist0.160409_leaves943.fasta\terror_length_multipler:32\trepitition:1\t199\t0\t0\t1372238	194	339	5645	1364294
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.458879_meanPairDist0.160409_leaves943.fasta\terror_length_multipler:64\trepitition:0\t199\t0\t0\t1372238	147	714	5619	1363992
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:Traceback (most recent call last):
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:  File "getErrorRates-filtered.py", line 86, in <module>
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:    for i in range(len(output_lines[0])):
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:IndexError: list index out of range
+16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.458879_meanPairDist0.160409_leaves943.fasta\terror_length_multipler:64\trepitition:1\t199\t0\t0\t1372238	147	714	5619	1363992
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.476485_meanPairDist0.140207_leaves112.fasta\terror_length_multipler:2\trepitition:0\t203\t0\t0\t163688	211	44	88	163306
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.476485_meanPairDist0.140207_leaves112.fasta\terror_length_multipler:2\trepitition:1\t203\t0\t0\t163688	219	10	122	163298
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.4-0.5:ChosenAlignments_16S.B_diameter0.4-0.5/chosen_alignments_repitition9_diameter0.476485_meanPairDist0.140207_leaves112.fasta\terror_length_multipler:3\trepitition:0\t203\t0\t0\t163688	209	12	186	163242
@@ -3290,10 +3287,7 @@
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.614032_meanPairDist0.122833_leaves843.fasta\terror_length_multipler:32\trepitition:0\t1191\t0\t0\t1167026	579	187	14947	1150991
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.614032_meanPairDist0.122833_leaves843.fasta\terror_length_multipler:32\trepitition:1\t1191\t0\t0\t1167026	583	117	15016	1150988
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.614032_meanPairDist0.122833_leaves843.fasta\terror_length_multipler:64\trepitition:0\t1191\t0\t0\t1167026	633	3631	26626	1135814
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:Traceback (most recent call last):
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:  File "getErrorRates-filtered.py", line 86, in <module>
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:    for i in range(len(output_lines[0])):
-16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:IndexError: list index out of range
+16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.614032_meanPairDist0.122833_leaves843.fasta\terror_length_multipler:64\trepitition:1\t1191\t0\t0\t1167026	633	3631	26626	1135814
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.630971_meanPairDist0.114503_leaves512.fasta\terror_length_multipler:2\trepitition:0\t614\t0\t0\t664845	615	120	452	662902
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.630971_meanPairDist0.114503_leaves512.fasta\terror_length_multipler:2\trepitition:1\t614\t0\t0\t664845	533	112	459	662985
 16S.B_ErrLen/FORMATTED_OUTPUT_diameter0.6-0.7:ChosenAlignments_16S.B_diameter0.6-0.7/chosen_alignments_repitition1_diameter0.630971_meanPairDist0.114503_leaves512.fasta\terror_length_multipler:3\trepitition:0\t614\t0\t0\t664845	586	136	722	662645
