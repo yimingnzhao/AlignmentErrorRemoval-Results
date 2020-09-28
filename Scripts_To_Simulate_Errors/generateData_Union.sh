@@ -40,44 +40,57 @@ for file in $1/*; do
 	echo "Choosing alignments from $aln_file for the error length multiplier $err_len_multiplier..."
 	python chooseSequences.py $aln_file $number_of_alignments
 
+	julia-1.1.1/bin/julia correction.jl -k 5 -m X -a N -n chosen_sequences.fasta > OUTPUT1 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 9 -m X -a N -n chosen_sequences.fasta > OUTPUT2 2> /dev/null
+	julia-1.1.1/bin/julia correction.jl -k 17 -m X -a N -n chosen_sequences.fasta > OUTPUT3 2> /dev/null
+	python unionK.py OUTPUT2 OUTPUT3 9 6
+	mv OUTPUT OUTPUT_ALL
+	python unionK.py OUTPUT1 OUTPUT_ALL 5 6
+	rm OUTPUT_ALL
+	cp OUTPUT ORIGINAL
+	
+
 	for (( j=0; j<$repititions; j++ )); do
 
 		# Draws error length and num error sequence divisor from a normal distribution
-		error_len=`python generateFromNormalDistribution.py $mu_error_len $sigma_error_len`
-		num_err_seq_divisor=`python generateFromNormalDistribution.py $mu_num_err_seq_divisor $sigma_num_err_seq_divisor`
+		error_len=`python3 generateFromNormalDistribution.py $mu_error_len $sigma_error_len`
+		num_err_seq_divisor=`python3 generateFromNormalDistribution.py $mu_num_err_seq_divisor $sigma_num_err_seq_divisor`
 		
 		# Runs algorithm before inserting errors
-		description="$aln_file\terror_length:$error_len\trepitition:$j"
-		julia correction.jl -k $value_of_k -m X -a N -n chosen_sequences.fasta > OUTPUT 2> /dev/null
+		description="$aln_file\terror_length:X\tnum_err_seq_divisor:$num_err_seq_divisor\trepitition:$j"
+	
+
+
 		cp chosen_sequences.fasta TEMP
-		python getErrorRates.py chosen_sequences.fasta TEMP OUTPUT $description 2> DESCRIPTION_FILE
+		python getErrorRates.py chosen_sequences.fasta TEMP ORIGINAL $description 2> DESCRIPTION_FILE
 		description=$(head -n 1 DESCRIPTION_FILE)
 		description=$(cat DESCRIPTION_FILE | sed -e "s/\t/\\\t/g")	
 		echo $description
-		rm TEMP OUTPUT
+		rm TEMP OUTPUT*
 		
 		len_of_err=`awk -v k=$value_of_k -v mult=$err_len_multiplier 'BEGIN { printf("%.0f", k * mult); }'`
 		echo "Generating error model for the error length multiplier $err_len_multiplier, repitition $j..."
 		num_alignments=$((`wc -l < chosen_sequences.fasta` / 2))
-		python generateErrorModel_RandomErrLen.py chosen_sequences.fasta $(($num_alignments / $num_err_seq_divisor + 1)) $value_of_k DNA
+		python3 generateErrorModel_RandomErrLen.py chosen_sequences.fasta $(($num_alignments / $num_err_seq_divisor + 1)) $value_of_k $data
 		echo "Running the correction algorithm..."
-		julia correction.jl -k 5 -m X -a N -n error.fasta > OUTPUT1 2> /dev/null
-		julia correction.jl -k 9 -m X -a N -n error.fasta > OUTPUT2 2> /dev/null
-		julia correction.jl -k 17 -m X -a N -n error.fasta > OUTPUT3 2> /dev/null
+		julia-1.1.1/bin/julia correction.jl -k 5 -m X -a N -n error.fasta > OUTPUT1 2> /dev/null
+		julia-1.1.1/bin/julia correction.jl -k 9 -m X -a N -n error.fasta > OUTPUT2 2> /dev/null
+		julia-1.1.1/bin/julia correction.jl -k 17 -m X -a N -n error.fasta > OUTPUT3 2> /dev/null
 		python unionK.py OUTPUT2 OUTPUT3 9 6
 		mv OUTPUT OUTPUT_ALL
-		python unionK.py OUTPUT2 OUTPUT_ALL 5 6
+		python unionK.py OUTPUT1 OUTPUT_ALL 5 6
 		rm OUTPUT_ALL
 		
 		echo "Getting error rates for the correction algorithm..."
-		python getErrorRates.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+		file_description=$(cat DESCRIPTION_FILE | sed -e "s/\//_/g" -e "s/.fasta.marked8//g" -e "s/\t/_/g" -e "s/error_length:X/errlen0/g" -e "s/num_err_seq_divisor:/numseqdiv/g" -e "s/repitition:/rep/g")
+		python getErrorRates-filtered.py position.fasta error.fasta OUTPUT $description >> $output_file 2>> $format_output_file
+		cp position.fasta "ERR_FILES/${file_description}_pos.fasta"
+		cp error.fasta "ERR_FILES/${file_description}_err.fasta"
+		cp OUTPUT "ERR_FILES/${file_description}_res.fasta"
 		rm reformat.fasta error.fasta position.fasta OUTPUT*
 	done
-	rm chosen_sequences.fasta
+	rm chosen_sequences.fasta ORIGINAL
 done
 
 rm DESCRIPTION_FILE
 unix2dos $format_output_file 2> /dev/null 
-
-
-
