@@ -343,10 +343,10 @@ ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
-  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   geom_text(aes(label=DR,y=rep(c(0.24,0.43,0.52,0.28,0.34),4)),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
             position = position_jitter(width = 0,height = 0.03),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_Diameter.pdf",width = 9,height = 8)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_Diameter_2.pdf",width = 9,height = 4.5)
 
 
 
@@ -358,10 +358,10 @@ ggplot(aes(x=SL,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+scale_x_continuous(name="Sequence Length")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
-  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
             position = position_jitter(width = 0,height = 0.05),color="black")
-#ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL.pdf",width = 9,height = 8)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL_2.pdf",width = 9,height = 4.5)
 
 
 ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", "),group=interaction(DR,ErrLenT,n,sep=", ")),
@@ -372,13 +372,18 @@ ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", "),group=interact
   geom_smooth(aes(group=interaction(ErrLenT,n,sep=", ")),se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_x_continuous(name="Sequence count")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
-  facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
   geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
             position = position_jitter(width = 0,height = 0.05),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N_2.pdf",width = 9,height = 8)
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N_4.pdf",width = 9,height = 4.5)
 
 
-
+fit = lm((TP/(TP+FN))~ErrLenT*n*Diameter*SL*N,d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") ,])
+af <- anova(fit)
+afss <- af$"Sum Sq"
+require(Hmisc)
+options(digits=3)
+latex(cbind(round(af[,1:4],3),Pvalue=round(af[,5:5],5),PctExp=round(afss/sum(afss)*100,2)),rowname = NULL,file = "anova-hackett.tex")
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
                      -(FN+TP)/(FN+FP+TP+TN)#-FN/(FN+TN)
