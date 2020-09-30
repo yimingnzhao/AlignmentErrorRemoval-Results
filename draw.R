@@ -151,6 +151,13 @@ ggsave("Figures/ErrParam_Figures/16SB_NumErrAlns_ROC.pdf", width=6, height=6)
 
 
 
+fit = lm((TP/(TP+FN))~ErrLenT*n*Diameter*N,d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])
+af <- anova(fit)
+afss <- af$"Sum Sq"
+require(Hmisc)
+options(digits=3)
+latex(cbind(round(af[,1:4],2),Pvalue=round(af[,5:5],6),PctExp=round(afss/sum(afss)*100,1)),file = "anova-hackett.tex")
+
 
 ggplot(aes(x=DR,y=FN/(FN+TN),group=interaction(ErrLenT,n,sep=", "),color=interaction(ErrLenT,n,sep=", "),linetype="After filtering"),
     data=d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])+
@@ -383,7 +390,7 @@ af <- anova(fit)
 afss <- af$"Sum Sq"
 require(Hmisc)
 options(digits=3)
-latex(cbind(round(af[,1:4],3),Pvalue=round(af[,5:5],5),PctExp=round(afss/sum(afss)*100,2)),rowname = NULL,file = "anova-hackett.tex")
+latex(cbind(round(af[,1:4],2),Pvalue=round(af[,5:5],6),PctExp=round(afss/sum(afss)*100,1)),file = "anova-hackett.tex")
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
                      -(FN+TP)/(FN+FP+TP+TN)#-FN/(FN+TN)
@@ -582,7 +589,7 @@ ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
 
-ggplot(aes(x=interaction(ErrLenT,n,sep=", "),xend=interaction(ErrLenT,n,sep=", "),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
+ggplot(aes(x=interaction(ErrLenT,n,sep=","),xend=interaction(ErrLenT,n,sep=","),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
        data=data.table::dcast(setDT(d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),]),ErrLenT+n+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
