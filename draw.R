@@ -4,10 +4,10 @@ require(reshape2)
 d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 
-d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
-d = d[d$DR!="concat",]
+d = d[d$DR!="concatenation",]
+d = d[d$N > 19 | !grepl("16S",d$E),]
 nlabels = c("1","2%","5%","10%","20%")
-levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
+#levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
 
 d$n=with(d,as.factor(round(100/((NumErrSeqDiv==0&grepl("ErrLen$",E))*20+(NumErrSeqDiv!=N|grepl("ErrLen$",E))*NumErrSeqDiv+(NumErrSeqDiv==N&!grepl("ErrLen$",E))*100))))
 d$nb=d$n
@@ -21,6 +21,12 @@ d[grepl("General$",d$E),"ErrLenT"]="~50"
 d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","2×7","3×11", "3×7","4×11", "4×7","8×11", "8×7","16×11","16×7", "32×11", "32×7","64×11","~50" ))
 
 d$SL = with(d,(TN+FP+FN+TP)/as.numeric(as.character(N)))
+
+
+# For Hackett, make sure sure error length is at most half of the sequence length
+d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
+d = d[!d$ErrLen==32 | !grepl("Hack",d$E) | d$SL>=704,]
+
 
 # Aggregate Sum function
 summ_roc <- function(d2,form) {
@@ -150,6 +156,13 @@ ggplot(aes(x=FP/(FP+TN),y=TP/(TP+FN), color=as.factor(n) ),data=summ_roc(d2,n~.)
 ggsave("Figures/ErrParam_Figures/16SB_NumErrAlns_ROC.pdf", width=6, height=6)
 
 
+
+fit = lm((TP/(TP+FN))~ErrLenT*n*Diameter*N,d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns") & d$N > 19,])
+af <- anova(fit)
+afss <- af$"Sum Sq"
+require(Hmisc)
+options(digits=3)
+latex(cbind(round(af[,1:4],2),Pvalue=round(af[,5:5],6),PctExp=round(afss/sum(afss)*100,1)),file = "16S-anova.tex")
 
 
 ggplot(aes(x=DR,y=FN/(FN+TN),group=interaction(ErrLenT,n,sep=", "),color=interaction(ErrLenT,n,sep=", "),linetype="After filtering"),
@@ -319,7 +332,7 @@ ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.charac
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   scale_y_continuous("FPR",labels=percent)+
-  scale_shape(name="")+scale_x_discrete(name="Gene")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
+  scale_shape(name="")+scale_x_discrete(name="Gene")+facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1,scales="free_y")+
   scale_color_brewer(palette = "Paired",name="Error Frequency")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_FPR.pdf",width = 9,height = 8)
 
@@ -337,15 +350,15 @@ ggsave("Figures/ErrParam_Figures/Hackett_NumErr_Recall.pdf",width = 9,height = 6
 
 ggplot(aes(x=Diameter,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
        data=d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns"),])+
-  stat_summary(position = position_dodge(width=0.01))+
+  stat_summary(position = position_dodge(width=0.01),alpha=0.99)+
   #geom_point(alpha=0.5,size=1)+
   theme_bw()+theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+#scale_x_discrete(name="Gene")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
-  geom_text(aes(label=DR,y=rep(c(0.24,0.43,0.52,0.28,0.34),4)),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
-            position = position_jitter(width = 0,height = 0.03),color="black")
+  geom_text(aes(label=DR,y=rep(c(0.3,0.3,0.3,0.3,0.3),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"  & d$n=="2%" &d$Rep==1,],
+            position = position_jitter(width = 0,height = 0.0),color="black")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_Diameter_2.pdf",width = 9,height = 4.5)
 
 
@@ -359,8 +372,8 @@ ggplot(aes(x=SL,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", ")),
   scale_shape(name="")+scale_x_continuous(name="Sequence Length")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
-  geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
-            position = position_jitter(width = 0,height = 0.05),color="black")
+  geom_text(aes(label=DR,y=rep(c(0.3,0.3,0.3,0.3,0.3),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
+            position = position_jitter(width = 0,height = 0.0),color="black")
 ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_SL_2.pdf",width = 9,height = 4.5)
 
 
@@ -373,9 +386,9 @@ ggplot(aes(x=N,y=TP/(TP+FN),color=interaction(ErrLenT,n,sep=", "),group=interact
   scale_x_continuous(name="Sequence count")+
   scale_color_brewer(palette = "Paired",name="Error Len, Freq")+
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),ncol=1)+
-  geom_text(aes(label=DR,y=rep(c(0.24,0.52,0.28,0.43,0.34),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
-            position = position_jitter(width = 0,height = 0.05),color="black")
-ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N_4.pdf",width = 9,height = 4.5)
+  geom_text(aes(label=DR,y=rep(c(0.3,0.3,0.3,0.3,0.3),4)[1:19]),data=d[d$E =="Hackett_Genes_NumErrAlns"& d$DR != "concat"  & d$n=="2%" &d$Rep==1 ,],
+            position = position_jitter(width = 0,height = 0.0),color="black")
+ggsave("Figures/ErrParam_Figures/Hackett_NumErrErrLen_Recall_vs_N_2.pdf",width = 9,height = 4.5)
 
 
 fit = lm((TP/(TP+FN))~ErrLenT*n*Diameter*SL*N,d[d$E %in% c( "Hackett_Genes_ErrLen","Hackett_Genes_NumErrAlns") ,])
@@ -383,7 +396,7 @@ af <- anova(fit)
 afss <- af$"Sum Sq"
 require(Hmisc)
 options(digits=3)
-latex(cbind(round(af[,1:4],3),Pvalue=round(af[,5:5],5),PctExp=round(afss/sum(afss)*100,2)),rowname = NULL,file = "anova-hackett.tex")
+latex(cbind(round(af[,1:4],2),Pvalue=round(af[,5:5],6),PctExp=round(afss/sum(afss)*100,1)),file = "anova-hackett.tex")
 
 ggplot(aes(x=reorder(paste(DR,round(Diameter,3),round(SL,0),as.numeric(as.character(N)),sep="\n"),
                      -(FN+TP)/(FN+FP+TP+TN)#-FN/(FN+TN)
@@ -582,7 +595,7 @@ ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
 
-ggplot(aes(x=interaction(ErrLenT,n,sep=", "),xend=interaction(ErrLenT,n,sep=", "),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
+ggplot(aes(x=interaction(ErrLenT,n,sep=","),xend=interaction(ErrLenT,n,sep=","),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
        data=data.table::dcast(setDT(d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),]),ErrLenT+n+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
