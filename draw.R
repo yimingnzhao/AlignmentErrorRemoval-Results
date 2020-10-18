@@ -15,7 +15,7 @@ levels(d$n) <- c(levels(d$n)[1],paste(levels(d$n)[0:-1],"%",sep=""),"~5%")
 d[grepl("General$",d$E),"n"]="~5%"
 
 d$ErrLen = (d$ErrLen==0)*8+d$ErrLen
-d$ErrLenT = paste(d$ErrLen, intToUtf8(215), ifelse(grepl("small",d$E),"7","11"),sep="")
+d$ErrLenT = paste(d$ErrLen, intToUtf8(215), ifelse(grepl("small",d$E),"11","11"),sep="")
 #d[grepl("small",d$E),]$ErrLenT = paste(d[grepl("small",d$E),]$ErrLen, intToUtf8(215), "4",sep="")
 d[grepl("General$",d$E),"ErrLenT"]="~50"
 d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","2×7","3×11", "3×7","4×11", "4×7","8×11", "8×7","16×11","16×7", "32×11", "32×7","64×11","~50" ))
@@ -103,8 +103,8 @@ ggsave("Figures/General_Figures/small10aa_General_Recall.pdf", width=6, height=6
 d$DR2 = cut(d$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
 # ROC for 16S.B with varying error lengths and fixed percentage of erroneous sequences
 options(digits = 2)
-d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns", "16S.B_General") & d$N > 19 ,], n+ErrLenT+DR2~.)
-A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLenT=d2$ErrLenT,  n=d2$n, DR=d2$DR2)
+d2=summ_roc(d[d$E %in% c( "16S.B_ErrLen","16S.B_NumErrAlns", "16S.B_General") & d$N > 19 ,], n+ErrLenT+DR2+E~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLenT=d2$ErrLenT,  n=d2$n, DR=d2$DR2,E=d2$E)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1,nrow=nrow(d2))), n=d2$n, ErrLenT=d2$ErrLenT, DR=d2$DR2)
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
@@ -125,7 +125,8 @@ ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(D
   scale_shape_manual(name="Err Len, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
   scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
-  scale_y_continuous("Recall",labels=percent)+facet_wrap(~ErrLenT=="8×11",labeller = function(x) list(c("Changing Error Length", "Changing Error Frequency")))+
+  scale_y_continuous("Recall",labels=percent)+
+  facet_wrap(~(E=="16S.B_NumErrAlns"),labeller = function(x) list(c("Changing Error Length", "Changing Error Frequency")))+
   geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
 ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC_faceted.pdf", width=10, height=5)
 
@@ -643,13 +644,15 @@ options(digits = 2)
 d2=summ_roc(d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),], ErrLenT+n~.)
 A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), n=d2$n, ErrLen=d2$ErrLenT)
 B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), n=d2$n, ErrLen=d2$ErrLenT)
-ggplot(data=A, aes(x, y, color=as.factor(ErrLen), shape=n)) + geom_point(alpha=1)+
-  theme_light()+theme(legend.position = "right")+
-  scale_shape(name="Error Frequency")+scale_color_brewer(name="Error Length",palette = "Paired")+
+ggplot(data=A, aes(x, y, color=as.factor(ErrLen))) + geom_point(alpha=.991)+
+  theme_light()+theme(legend.position = "none")+ #,legend.direction = "horizontal")+
+  scale_shape(name=element_blank())+scale_color_brewer(name=element_blank(),palette = "Paired")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent,breaks = c(0.2,0.4,0.6,0.8,1))+
-  ggtitle("small-10-aa with Varying Error Lengths: ROC")
-ggsave("Figures/ErrParam_Figures/small10aa_ErrLenNumErr_ROC.pdf", width=6, height=6)
+  geom_text(aes(label=paste(n,ErrLen,sep=", ")),nudge_y = 0.012,size=2.75)+
+  coord_cartesian(xlim=c(0.0124,0.01425))
+  #ggtitle("small-10-aa with Varying Error Lengths: ROC")
+ggsave("Figures/ErrParam_Figures/small10aa_ErrLenNumErr_ROC.pdf", width=4, height=4)
 
 # # ROC for small-10-aa with varying percentages of erroneous sequences and fixed error lengths
 # d2=d[d$E=="small-10-aa_NumErrAlns",]
