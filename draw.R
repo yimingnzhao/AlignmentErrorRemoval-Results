@@ -1,6 +1,7 @@
 require(ggplot2); require(scales); 
 require(data.table)
 require(reshape2)
+
 d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 
@@ -877,3 +878,47 @@ ggsave("Figures/Union_Figures/16SB_4k_ROC.pdf", width=6, height=6)
 
 
 
+d=(read.csv("./CSV_Files/res_16SK.csv", sep=",", header=F))
+names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "K", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
+
+d = d[d$N > 19 ]
+nlabels = c("1","2%","5%","10%","20%")
+#levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
+d$n="~5%"
+
+d$ErrLenT = paste(d$ErrLen, intToUtf8(215), ifelse(grepl("small",d$E),"11","11"),sep="")
+d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","3×11", "4×11","8×11","16×11", "32×11", "64×11" ))
+
+d$SL = with(d,(TN+FP+FN+TP)/as.numeric(as.character(N)))
+
+
+options(digits = 2)
+d2=summ_roc(d[d$N > 19 ,], K+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A[A$ErrLen < 32,], aes(x, y, color=as.factor(K), shape=as.factor(DR))) + 
+  geom_point(alpha=0.99)+
+  geom_line(aes(group=K))+
+  theme_bw()+theme(legend.position = c(.87,.15),legend.box.just = "top",legend.box = "horizontal")+
+  #geom_point(data=B)+
+  #geom_line(aes(group=K),data=B,linetype=2)+
+  scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Spectral",label = function(x) substr(gsub(pattern = ""," ",x),2,4) )+
+  scale_x_continuous(name="FPR",labels=percent)+
+  facet_wrap(~ErrLen,nrow=2, labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+#ggtitle("16S.B: ROC")
+ggsave("Figures/ErrParam_Figures/16SB_K_byerr_faceted.pdf", width=10, height=6)
+
+
+ggplot(data=A[A$ErrLen < 32,], aes(x, y, color=as.factor(ErrLen), shape=as.factor(DR))) + 
+  geom_point(alpha=0.99)+
+  geom_line(aes(group=ErrLen))+
+  theme_bw()+theme(legend.position = "right",legend.box.just = "top")+
+  #geom_point(data=B)+
+  #geom_line(aes(group=K),data=B,linetype=2)+
+  scale_shape(name="Diameter")+
+  scale_color_brewer(name="Err Len",palette = "Paired" ,labels = function(x) {paste(x, intToUtf8(215), "11")} )+
+  scale_x_continuous(name="FPR",labels=percent)+
+  facet_wrap(~K,nrow=3, labeller = label_both )+
+  scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+ggsave("Figures/ErrParam_Figures/16SB_K_byK_faceted.pdf", width=8, height=7)
