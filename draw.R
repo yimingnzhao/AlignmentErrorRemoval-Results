@@ -655,6 +655,15 @@ ggplot(data=A, aes(x, y, color=as.factor(ErrLen))) + geom_point(alpha=.991)+
   #ggtitle("small-10-aa with Varying Error Lengths: ROC")
 ggsave("Figures/ErrParam_Figures/small10aa_ErrLenNumErr_ROC.pdf", width=4, height=4)
 
+
+ggplot(data=A, aes(x, y, size=n, shape=ErrLen),color="black") + geom_point(alpha=.99)+
+  theme_light()+theme(legend.position = "right",axis.text = element_text(size=15),axis.title = element_text(size=16))+
+  scale_shape_manual(name="Error Length",values=c(6,5,4,1,3,2,19,17,18,16,15,14,90))+scale_color_discrete(name="Gene")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_size_manual(name="Error Frequency",values=sqrt(c(1,4,10,20,40)))+
+  scale_y_continuous("Recall",labels=percent)
+ggsave("Figures/ErrParam_Figures/small10aa_ErrLenNumErr_ROC_2.pdf", width=6, height=5)
+
 # # ROC for small-10-aa with varying percentages of erroneous sequences and fixed error lengths
 # d2=d[d$E=="small-10-aa_NumErrAlns",]
 # d2$n=with(d2,as.factor(100/((NumErrSeqDiv!=N)*NumErrSeqDiv+(NumErrSeqDiv==N)*100)))
@@ -881,7 +890,7 @@ ggsave("Figures/Union_Figures/16SB_4k_ROC.pdf", width=6, height=6)
 d=(read.csv("./CSV_Files/res_16SK.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "K", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
 
-d = d[d$N > 19 ]
+d = d[d$N > 19, ]
 nlabels = c("1","2%","5%","10%","20%")
 #levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
 d$n="~5%"
@@ -891,12 +900,13 @@ d$ErrLenT = factor(d$ErrLenT,levels=c("2×11","3×11", "4×11","8×11","16×11",
 
 d$SL = with(d,(TN+FP+FN+TP)/as.numeric(as.character(N)))
 
+d = d[d$E == "16S.B_K_p0.1_q0.5",]
 
 options(digits = 2)
-d2=summ_roc(d[d$N > 19 ,], K+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
-A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
-ggplot(data=A[A$ErrLen < 32,], aes(x, y, color=as.factor(K), shape=as.factor(DR))) + 
+d2=summ_roc(d[d$N > 19 ,], K+E+ErrLen+cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), E=d2$E, ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+#B = data.frame(x=d2$FP0/(d2$FP0+d2$TN0),y=as.vector(matrix(1.1,nrow=nrow(d2))), ErrLen=d2$ErrLen, K=d2$K, DR=d2$`cut(Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)`)
+ggplot(data=A[A$ErrLen <= 32,], aes(x, y, color=as.factor(K), shape=as.factor(DR))) + 
   geom_point(alpha=0.99)+
   geom_line(aes(group=K))+
   theme_bw()+theme(legend.position = c(.87,.15),legend.box.just = "top",legend.box = "horizontal")+
@@ -904,21 +914,22 @@ ggplot(data=A[A$ErrLen < 32,], aes(x, y, color=as.factor(K), shape=as.factor(DR)
   #geom_line(aes(group=K),data=B,linetype=2)+
   scale_shape(name="Diameter")+scale_color_brewer(name="Setting",palette = "Spectral",label = function(x) substr(gsub(pattern = ""," ",x),2,4) )+
   scale_x_continuous(name="FPR",labels=percent)+
-  facet_wrap(~ErrLen,nrow=2, labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
+  facet_wrap(~ErrLen, labeller = function(x) {list(ErrLen=paste(x$ErrLen, intToUtf8(215), "11"))})+
   scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
 #ggtitle("16S.B: ROC")
 ggsave("Figures/ErrParam_Figures/16SB_K_byerr_faceted.pdf", width=10, height=6)
 
 
-ggplot(data=A[A$ErrLen < 32,], aes(x, y, color=as.factor(ErrLen), shape=as.factor(DR))) + 
+ggplot(data=A[A$ErrLen <= 64,], aes(x, y, color=as.factor(ErrLen), shape=as.factor(DR))) + 
   geom_point(alpha=0.99)+
   geom_line(aes(group=ErrLen))+
-  theme_bw()+theme(legend.position = "right",legend.box.just = "top")+
+  theme_bw()+theme(legend.position = c(.9,.2))+
   #geom_point(data=B)+
   #geom_line(aes(group=K),data=B,linetype=2)+
   scale_shape(name="Diameter")+
-  scale_color_brewer(name="Err Len",palette = "Paired" ,labels = function(x) {paste(x, intToUtf8(215), "11")} )+
-  scale_x_continuous(name="FPR",labels=percent)+
-  facet_wrap(~K,nrow=3, labeller = label_both )+
-  scale_y_continuous("Recall",labels=percent)#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
-ggsave("Figures/ErrParam_Figures/16SB_K_byK_faceted.pdf", width=8, height=7)
+  scale_color_brewer(name="Error Len",palette = "Paired" ,labels = function(x) {paste(x, intToUtf8(215), "11")} )+
+  scale_x_continuous(name="FPR",labels=percent,breaks=c(0.0001,0.0004,0.0007))+
+  facet_wrap(~K, nrow=2,labeller = label_both )+
+  scale_y_continuous("Recall",labels=percent)+#coord_cartesian(xlim=c(0, 0.0015), ylim=c(0,1))
+ggsave("Figures/ErrParam_Figures/16SB_K_byK_faceted.pdf", width=10, height=8)
+
