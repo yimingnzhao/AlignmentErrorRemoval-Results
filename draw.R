@@ -29,6 +29,13 @@ d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
 d = d[!d$ErrLen==32 | !grepl("Hack",d$E) | d$SL>=704,]
 
 
+t = read.csv('CSV_Files/res_other_methods.csv',header=F)
+names(t)=c("AlignmentName" ,"DiameterRange/Gene" ,"X" ,"Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "real_time", "user_time", "sys_time", "FP", "FN", "TP", "TN")
+t$time=as.numeric(sub("m.*","",t$real_time))*60+as.numeric(sub("s$","",sub(".*m","",t$real_time)))
+t
+t$AlignmentName
+
+  
 # Aggregate Sum function
 summ_roc <- function(d2,form) {
   ad2 = dcast(d2, form ,fun.aggregate=sum,value.var = c("FP"))
@@ -285,10 +292,13 @@ ggplot(aes(yend=rf_res,y=rf_err,x=reorder(DiameterRangeGene,rf_err/(2*N-6)),xend
   scale_color_gradient(low = "#55BBFF",high = "#112244",name="Diameter")+
   ggsave("Figures/ErrParam_Figures/Hacket-wRF.pdf",width = 5.2,height = 5)
 
-ggplot(aes(yend=rf_res/(2*N-6),y=rf_err/(2*N-6),x=reorder(Rep,rf_err),xend=reorder(Rep,rf_err),
+ggplot(aes(ymax=rf_res/(2*N-6),ymin=rf_err/(2*N-6),
+           yend=rf_res/(2*N-6),y=rf_res/(2*N-6),
+           x=reorder(Rep,rf_err),xend=reorder(Rep,rf_err),
            shape=rf_res>rf_err,color=AlignmentName),
        data=bs[grepl("small-10-aa-RV100-BBA0039",bs$AlignmentName),])+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
+  geom_linerange(position = position_dodge(width=0.4),size=0.8,arrow = arrow(length=unit(0.1,"cm")))+
   geom_segment(position = position_dodge(width=0.4),size=0.8,arrow = arrow(length=unit(0.1,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
@@ -297,19 +307,20 @@ ggplot(aes(yend=rf_res/(2*N-6),y=rf_err/(2*N-6),x=reorder(Rep,rf_err),xend=reord
   scale_shape(name="")+
   scale_x_discrete(name="")+
   scale_color_brewer(name="",palette = "Dark2",labels=c("TAPER","DivA"))+
-  ggsave("Figures/ErrParam_Figures/AA-RF.pdf",width = 5.2,height = 5)
+  ggsave("Figures/ErrParam_Figures/AA-RF.pdf",width = 6,height = 5)
 
 ggplot(aes(yend=rfw_res,y=rfw_err,x=reorder(Rep,rf_err/(2*N-6)),xend=reorder(Rep,rf_err),
-           shape=rf_res>rf_err),
-       data=bs[bs$AlignmentName=="small-10-aa-RV100-BBA0039",])+
+           shape=rf_res>rf_err,color=AlignmentName),
+       data=bs[grepl("small-10-aa-RV100-BBA0039",bs$AlignmentName),])+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
-  geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")),color="#3377AA")+
+  geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
   theme(legend.position = c(.27,.891),legend.direction = "horizontal", legend.text.align = 1,axis.text.x = element_text(angle=90))+
   scale_y_continuous(name="WRF error")+
   scale_shape(name="")+
   scale_x_discrete(name="")+
+  scale_color_brewer(name="",palette = "Dark2",labels=c("TAPER","DivA"))+
   ggsave("Figures/ErrParam_Figures/AA-wRF.pdf",width = 5.2,height = 5)
 
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
@@ -703,7 +714,8 @@ ggplot(aes(x=n,y=TP/(TP+FN),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Error Frequency")+
   scale_color_brewer(palette = "Paired",name="")+
-  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"),data=t)+
+  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"), width = 0.2,
+               data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])+
   scale_fill_discrete(name="")+
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_Recall.pdf",width = 5,height = 4.5)
 
@@ -713,7 +725,7 @@ ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
   geom_smooth(se=F,method="lm")+scale_y_continuous("FDR",labels=percent)+scale_x_discrete(name="Error Frequency")+
   scale_shape(name="")+#facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="")+
-  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"),data=t)
+  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"),data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FDR.pdf",width = 5,height = 4.5)
 
 ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
@@ -722,14 +734,14 @@ ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
   geom_smooth(se=F,method="lm")+scale_y_continuous("FPR",labels=percent)+
   scale_shape(name="")+#facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="")+scale_x_discrete(name="Error Frequency")+
-  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"),data=t)
+  geom_boxplot(aes(x="5%",fill="DivA",color="8×11"),data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
 
 ggplot(aes(x=interaction(ErrLenT,n,sep=","),color="TAPER",xend=interaction(ErrLenT,n,sep=","),yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN)), #,color=interaction(ErrLenT,n,sep=", ")),
        data=data.table::dcast(setDT(d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),]),ErrLenT+n+E~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
-  geom_segment(position = position_dodge(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  geom_segment(size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
   theme(legend.position = "bottom",legend.direction = "horizontal", legend.text.align = 1)+
@@ -738,7 +750,7 @@ ggplot(aes(x=interaction(ErrLenT,n,sep=","),color="TAPER",xend=interaction(ErrLe
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x")+
   scale_color_brewer(palette = "Dark2",name="Method")+
   geom_segment(aes(color="DivA",x="8×11,5%",xend="8×11,5%"),
-               data=data.table::dcast(setDT(t),ErrLen~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")),
+               data=data.table::dcast(setDT(t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",]),ErrLen~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")),
                position = position_nudge(x=0.2),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_percenterror_arrow_log.pdf",width = 7.5,height =4)
 
@@ -752,9 +764,10 @@ ggplot(aes(x=interaction(ErrLenT,n,sep=", "),color="TAPER",
   scale_shape(name="")+scale_x_discrete(name="")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x")+
   scale_color_brewer(palette = "Dark2",name="Method")+
-  stat_summary(aes(color="DivA",x="8×11, 5%"),data=t)+
+  stat_summary(aes(color="DivA",x="8×11, 5%"),data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])+
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErrAlns_sizechange.pdf",width = 7.5,height =4)
 
+qplot(AlignmentName,time/3600,data=t)+scale_y_log10()
 # # small-10-aa - Varying error lengths and fixed percentage of erroneous sequences
 # ggplot(aes(x=n,y=TP/(TP+FN),color=as.factor(ErrLen)),data=d[d$E=="small-10-aa_ErrLen" ,])+
 #   geom_point(alpha=0.5)+theme_classic()+geom_smooth()+scale_y_continuous("Recall")+
