@@ -1,6 +1,4 @@
-require(ggplot2); require(scales); 
-require(data.table)
-require(reshape2)
+require(ggplot2); require(scales); require(data.table); require(reshape2)
 
 d=(read.csv("./CSV_Files/res_NewErrRates.csv", sep=",", header=F))
 names(d) <- c("E", "DR", "X", "Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0", "FN0", "TP0", "TN0", "FP", "FN", "TP", "TN")
@@ -137,14 +135,16 @@ ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC.pdf", width=6.6, height=5
 ggplot(data=A, aes(x, y, shape=interaction(ErrLenT,n,sep=", "),color=as.factor(DR))) + 
   geom_point(alpha=1)+
   geom_path(aes(group=DR),data=A[A$n!="~5%",],linetype=1)+
-  theme_classic()+theme(legend.position = c(0.7,0.2),legend.text.align = 1,legend.direction = "horizontal")+
+  theme_classic()+theme(legend.position = c(0.7,0.2),legend.text.align = 1,legend.direction = "horizontal",
+                        plot.tag.position = c(0.015, 0.975),plot.tag = element_text(size=15,face = "bold"))+labs(tag = "a)")+
   scale_shape_manual(name="Err Len, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3))+
   scale_color_brewer(name="Diameter",palette = "Dark2")+
   scale_x_continuous(name="FPR",labels=percent)+
   scale_y_continuous("Recall",labels=percent)+
   facet_wrap(~(E=="16S.B_NumErrAlns"),labeller = function(x) list(c("Changing Error Length", "Changing Error Frequency")))+
-  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)
-ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC_faceted.pdf", width=10, height=5)
+  geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DR)),data=B,linetype=1,size=1)+
+  #annotate(geom="text",label="a)",x=-0.00033,y=1.024,size=5)+coord_cartesian(clip = 'off',xlim=c(0,0.0016),ylim=c(0.7,1))+
+ggsave("Figures/ErrParam_Figures/16SB_ErrLenNumErr_ROC_faceted.pdf", width=10, height=4.8)
 
 
 
@@ -205,27 +205,32 @@ ggplot(aes(color=DR2,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=interaction(ErrLe
   geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
-  theme(legend.position = c(.27,.1),legend.direction = "horizontal", legend.text.align = 1)+
+  theme(legend.position = c(.27,.1),legend.direction = "horizontal", legend.text.align = 1, 
+        plot.tag.position = c(0.01, 0.975),plot.tag = element_text(size=15,face = "bold"))+labs(tag = "c)")+
   scale_y_log10("Percent error",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Error Len, Freq")+
   facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
-  scale_color_brewer(palette = "Dark2",name="Diameter")#+geom_hline(yintercept = 0.0003)
-ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",width = 10,height =5)
+  scale_color_brewer(palette = "Dark2",name="Diameter")+#+
+  #coord_cartesian(clip = 'off',ylim=c(0.000003,0.02),xlim=c(1,7))+annotate(geom="text",label="c)",x=-1,y=0.035,size=5)+
+ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",width = 10,height =4.8)
 
 
-ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DiameterRange,xend=DiameterRange),
-       data=data.table::dcast(setDT(t[t$AlignmentName %in% c("16S.B-Divvier", "16S.B_General") &t$N>19,]),
-                              DiameterRange+AlignmentName~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DR2,xend=DR2),
+       data=data.table::dcast(setDT(t4[t4$AlignmentName %in% c("16S.B-Divvier", "16S.B_General") &t4$N>19,]),
+                              DR2+AlignmentName~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
   #stat_summary(position = position_dodge(width=0.3),geom="line")+
   theme_classic()+
-  theme(legend.position = c(.27,.1),legend.direction = "horizontal", legend.text.align = 1)+
+  theme(legend.position = c(.82,.1),axis.text.x = element_text(size=7.5),
+        plot.tag.position = c(0.015, 0.975),plot.tag = element_text(size=15,face = "bold"))+labs(tag = "d)")+
   scale_y_log10("Percent error",labels=percent)+
-  scale_shape(name="")+
+  scale_x_discrete(name="Diameter")+
+  facet_wrap(~"Changing methods")+
   #scale_x_discrete(name="Error Len, Freq")+
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
-  scale_color_brewer(palette = "Dark2",name="Diameter")#+geom_hline(yintercept = 0.0003)
+  scale_color_brewer(name="",palette = "Set2" ,labels=c("TAPER","Divvier"))+
+  ggsave("Figures/ErrParam_Figures/16SB_methods_arrow.pdf", width=2.5*1.2, height=4.8*1.2)
 
 options(digits = 2)
 t4$DR2 = cut(t4$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
@@ -234,18 +239,35 @@ A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), DiameterRange=d2$DR2
 ggplot(data=A, aes(x, y, shape=AlignmentName,color=DiameterRange)) + 
   geom_point(alpha=0.99,size=2.5)+
   #geom_path(aes(group=interaction(AlignmentName)))+
-  theme_classic()+theme(legend.position = c(0.86,0.265),legend.text.align = 1)+
+  theme_classic()+theme(legend.position = c(0.8,0.29),legend.text.align = 1,axis.title.y = element_text(vjust=-4),
+                        plot.tag.position = c(0.075, 0.975),plot.tag = element_text(size=15,face = "bold"))+labs(tag = "b)")+
   scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("TAPER","Divvier"))+
   scale_color_brewer(name="",palette = "Dark2")+
   #scale_size_discrete(name="Diameter")+
   scale_x_continuous(name="FPR")+
   scale_y_continuous("Recall",labels=percent)+
+  #annotate(geom="text",label="b)",x=-0.008,y=1.02,size=5)+
+  coord_cartesian(xlim=c(0,0.03),ylim=c(0.7,1))+
+  facet_wrap(~"Changing methods")+
   #geom_line(aes(group=DiameterRange),linetype=3,size=0.3)+
   #geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DiameterRange)),data=B,linetype=1,size=1)
-ggsave("Figures/ErrParam_Figures/16SB_methods.pdf", width=5.6, height=5.6)
+ggsave("Figures/ErrParam_Figures/16SB_methods-narrow.pdf", width=2.7*1.1, height=4.8*1.1)
+
+ggplot(data=A, aes(x, y, shape=AlignmentName,color=DiameterRange)) + 
+  geom_point(alpha=0.99,size=2.5)+
+  #geom_path(aes(group=interaction(AlignmentName)))+
+  theme_classic()+theme(legend.position = c(0.8,0.12),legend.direction = "horizontal",
+                        plot.tag.position = c(0.015, 0.975),plot.tag = element_text(size=16,face = "bold"))+labs(tag = "c)")+
+  scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("TAPER","Divvier"))+
+  scale_color_brewer(name="",palette = "Dark2", guide="none")+
+  #scale_size_discrete(name="Diameter")+
+  scale_x_continuous(name="FPR")+
+  geom_text(aes(label=DiameterRange),nudge_y = -0.0051,nudge_x=0.0002,size=3)+
+  scale_y_continuous("Recall",labels=percent)+
+ggsave("Figures/ErrParam_Figures/16SB_methods.pdf",width = 4.6,height = 3.8)
 
 
-ggplot(data=A, aes(x, y, shape=DiameterRange,color=AlignmentName)) + 
+ ggplot(data=A, aes(x, y, shape=DiameterRange,color=AlignmentName)) + 
   geom_point(alpha=1)+
   #geom_path(aes(group=interaction(AlignmentName)))+
   theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
@@ -273,6 +295,9 @@ names(bs) <- c("AlignmentName","DiameterRangeGene","X","Diameter","PD","N","ErrL
 bs2 = cbind(melt(bs[c(1:9,10:13)],id.vars = 1:9), melt(bs[c(1:9,14:17)],id.vars = 1:9)[,10:11])
 names(bs2)[c(12,13)]=c("v","after")
 names(bs2)
+head(bs)
+bs$DR2 = cut(bs$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
+bs$rf_errN = bs$rf_err/(2*bs$N-6)
 
 bh = cbind(dcast(DiameterRangeGene+N+Diameter~.,data=bs[bs$AlignmentName=="HackettGenes",],value.var = "rf_res",fun.aggregate = mean),
            dcast(DiameterRangeGene~.,data=bs[bs$AlignmentName=="HackettGenes",],value.var = "rf_err",fun.aggregate = mean)[,2])
@@ -296,20 +321,6 @@ ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=-(rf_err-rf_res)/(2*N-6)),d
   ggsave("Figures/ErrParam_Figures/16S-RF.pdf",width = 5.2,height = 5)
 
 
-ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=(rf_err-rf_res)/rf_err),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
-  geom_jitter(alpha=0.5,position = position_jitterdodge())+
-  #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
-  theme_classic()+
-  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
-  #scale_color_gradient(low = "#55BBFF",high = "#112244")+
-  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
-  scale_y_continuous("Relative reduction in  WRF",labels=percent)+
-  scale_x_discrete(name="Diameter")+
-  geom_hline(yintercept = 0)+
-  theme(legend.position = c(.2,.2),legend.direction = "horizontal", legend.text.align = 1)+
-  coord_cartesian(ylim=c(-2,1))+ggsave("Figures/ErrParam_Figures/16S-rel-RF.pdf",width = 5.2,height = 5)
-
-
 ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=-(rfw_err-rfw_res)),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
   geom_jitter(alpha=0.5,position = position_jitterdodge())+
   #facet_wrap(~AlignmentName)+
@@ -324,23 +335,51 @@ ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=-(rfw_err-rfw_res)),data=bs
   theme(legend.position = c(.2,.1),legend.direction = "horizontal", legend.text.align = 1)+
   ggsave("Figures/ErrParam_Figures/16S-RFw.pdf",width = 5.2,height = 5)
 
-ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=(rfw_err-rfw_res)/rfw_err),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+
+ggplot(aes(color=AlignmentName,x=DR2,y=ifelse(rf_err==0&rf_res==0,0,(rf_err-rf_res)/rf_err)),
+       data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
+  #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  scale_color_brewer(name="",palette = "Set2" ,labels=c("TAPER","Divvier"))+
+  scale_y_continuous("Relative reduction in  RF",labels=percent)+
+  scale_x_discrete(name="Diameter")+
+  geom_hline(yintercept = 0)+
+  theme(legend.position = c(.25,.1),legend.direction = "horizontal", legend.text.align = 1,
+        plot.tag.position = c(0.01, 0.975),plot.tag = element_text(size=16,face = "bold"))+labs(tag = "d)")+
+  coord_cartesian(ylim=c(-1.9,1))+
+  ggsave("Figures/ErrParam_Figures/16S-rel-RF.pdf",width = 4.6,height = 3.8)
+
+ggplot(aes(color=AlignmentName,x=DR2,y=(rfw_err-rfw_res)/rfw_err),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
   geom_jitter(alpha=0.5,position = position_jitterdodge())+
   #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
   theme_classic()+
   geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
   #scale_color_gradient(low = "#55BBFF",high = "#112244",name="Error before")+
-  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
+  scale_color_brewer(name="",palette = "Set2" ,labels=c("TAPER","Divvier"))+
   scale_y_continuous("Relative reduction in  WRF",labels=percent)+
   scale_x_discrete(name="Diameter")+
   geom_hline(yintercept = 0)+
-  theme(legend.position = c(.3,.1),legend.direction = "horizontal", legend.text.align = 0)+
-  coord_cartesian(ylim=c(-1.5,1.2))
-  ggsave("Figures/ErrParam_Figures/16S-RFw-change.pdf",width = 5.2,height = 5)
+  theme(legend.position = c(.25,.1),legend.direction = "horizontal", legend.text.align = 0,
+        plot.tag.position = c(0.01, 0.975),plot.tag = element_text(size=16,face = "bold"))+labs(tag = "e)")+
+  coord_cartesian(ylim=c(-1.9,1))+
+  ggsave("Figures/ErrParam_Figures/16S-RFw-change.pdf",width = 4.6,height = 3.8)
 
-
-
-
+  ggplot(aes(x=DR2,y=value,color=variable),data=melt(bs[bs$AlignmentName%in%c("16S.B"),c("DR2","N", "rf_errN","rfw_err")],id.vars = c("DR2","N")))+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
+  #geom_density()+
+  #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244",name="Error before")+
+  scale_color_brewer(name="",palette = "Paired" ,labels=c("RF","WRF"))+
+  scale_y_continuous("(w)RF error before filtering")+
+  scale_x_discrete(name="Diameter")+
+  theme(legend.position = c(.2,.9), legend.text.align = 0,
+        plot.tag.position = c(0.01, 0.975),plot.tag = element_text(size=12,face = "bold"))+labs(tag = "g)")+
+ ggsave("Figures/ErrParam_Figures/16S-RF-error.pdf",width = 2.68*1.1,height = 3.5*1.1)
 
 ggplot(aes(color=N,x=DiameterRangeGene,y=(value-after)),data=bs2[bs2$AlignmentName=="16S.B",])+geom_point()+
   #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
