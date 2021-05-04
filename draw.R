@@ -795,7 +795,7 @@ ggsave("Figures/ErrParam_Figures/Hackett_ErrLenFreq_ROC_genes.pdf", width=9.5, h
 
 ggplot(aes(x=n,y=TP/(TP+FN),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns") ,])+
   geom_boxplot()+
-  theme_classic()+theme(legend.position = c(.85,.25),legend.direction = "vertical", legend.text.align = 1)+
+  theme_classic()+theme(legend.position = c(.85,.33),legend.direction = "vertical", legend.text.align = 1)+
   geom_smooth(se=F,method="lm")+scale_y_continuous("Recall",labels=percent)+
   scale_shape(name="")+scale_x_discrete(name="Error Frequency")+
   scale_color_brewer(palette = "Paired",name="")+
