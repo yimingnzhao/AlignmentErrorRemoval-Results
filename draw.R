@@ -30,11 +30,19 @@ d = d[!d$ErrLen==32 | !grepl("Hack",d$E) | d$SL>=704,]
 
 
 t = read.csv('CSV_Files/res_other_methods.csv',header=F)
-names(t)=c("AlignmentName" ,"DiameterRange/Gene" ,"X" ,"Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "real_time", "user_time", "sys_time", "FP", "FN", "TP", "TN")
-t$time=as.numeric(sub("m.*","",t$real_time))*60+as.numeric(sub("s$","",sub(".*m","",t$real_time)))
-t
+names(t)=c("AlignmentName" ,"DiameterRange" ,"X" ,"Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "real_time", "user_time", "sys_time", "FP", "FN", "TP", "TN")
+#t$time=as.numeric(sub("m.*","",t$real_time))*60+as.numeric(sub("s$","",sub(".*m","",t$real_time)))
+t$time=as.numeric(sub("user$","",sub("s$","",sub(".*m","",t$real_time)))) + as.numeric(ifelse(grepl("user",t$real_time), 0, sub("[m].*","",t$real_time)))*60
 t$AlignmentName
 
+md= merge(t[t$AlignmentName=="16S.B-Divvier",],d[d$ErrLenT=="~50",],
+           by.y = c("DR","X","Diameter","PD","N","NumErrSeqDiv","Rep"),by.x=c("DiameterRange","X","Diameter","PD","N","NumErrSeqDiv","Rep"))
+t2=md[,c(18,1:5,9,6:7,10:12,24:27,17,20:23)]
+t3=md[,c(8,1:5,9,6:7,10:12,13:16,17,20:23)]
+names(t2) = names(t3) = c(names(t),c("FP0","FN0","TP0","TN0"))
+t4=rbind(t2,t3)
+t4$AlignmentName = factor(t4$AlignmentName)
+head(t4)
   
 # Aggregate Sum function
 summ_roc <- function(d2,form) {
@@ -204,6 +212,58 @@ ggplot(aes(color=DR2,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=interaction(ErrLe
   scale_color_brewer(palette = "Dark2",name="Diameter")#+geom_hline(yintercept = 0.0003)
 ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",width = 10,height =5)
 
+
+ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DiameterRange,xend=DiameterRange),
+       data=data.table::dcast(setDT(t[t$AlignmentName %in% c("16S.B-Divvier", "16S.B_General") &t$N>19,]),
+                              DiameterRange+AlignmentName~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
+  #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
+  geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+  #stat_summary(position = position_dodge(width=0.3),geom="line")+
+  theme_classic()+
+  theme(legend.position = c(.27,.1),legend.direction = "horizontal", legend.text.align = 1)+
+  scale_y_log10("Percent error",labels=percent)+
+  scale_shape(name="")+
+  #scale_x_discrete(name="Error Len, Freq")+
+  #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
+  scale_color_brewer(palette = "Dark2",name="Diameter")#+geom_hline(yintercept = 0.0003)
+
+options(digits = 2)
+t4$DR2 = cut(t4$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
+d2=summ_roc(t4[t4$N>19,], DR2+AlignmentName~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), DiameterRange=d2$DR2,  AlignmentName=d2$AlignmentName)
+ggplot(data=A, aes(x, y, shape=AlignmentName,color=DiameterRange)) + 
+  geom_point(alpha=0.99,size=2.5)+
+  #geom_path(aes(group=interaction(AlignmentName)))+
+  theme_classic()+theme(legend.position = c(0.86,0.265),legend.text.align = 1)+
+  scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("TAPER","Divvier"))+
+  scale_color_brewer(name="",palette = "Dark2")+
+  #scale_size_discrete(name="Diameter")+
+  scale_x_continuous(name="FPR")+
+  scale_y_continuous("Recall",labels=percent)+
+  #geom_line(aes(group=DiameterRange),linetype=3,size=0.3)+
+  #geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DiameterRange)),data=B,linetype=1,size=1)
+ggsave("Figures/ErrParam_Figures/16SB_methods.pdf", width=5.6, height=5.6)
+
+
+ggplot(data=A, aes(x, y, shape=DiameterRange,color=AlignmentName)) + 
+  geom_point(alpha=1)+
+  #geom_path(aes(group=interaction(AlignmentName)))+
+  theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
+  scale_shape_manual(name="Length, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3,90))+
+  scale_color_brewer(name="Method",palette = "Dark2")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent)
+  #geom_line(aes(group=AlignmentName,linetype=AlignmentName),color="1")
+  #geom_linerange(aes(x=x,ymin=0.995,ymax=1.005,color=as.factor(DiameterRange)),data=B,linetype=1,size=1)
+
+ggplot(data=t4, aes(FP/(FP+TN), TP/(TP+FN), shape=DiameterRange,color=AlignmentName)) + 
+  geom_point(alpha=1)+
+  #geom_path(aes(group=interaction(AlignmentName)))+
+  theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
+  scale_shape_manual(name="Length, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3,90))+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
+  scale_x_continuous(name="FPR",labels=percent,trans = "log2")+
+  scale_y_continuous("Recall",labels=percent)
 
 
 bs = read.csv('CSV_Files/res_treecmp.csv',head=F)
