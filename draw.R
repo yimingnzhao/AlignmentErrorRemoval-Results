@@ -282,10 +282,13 @@ bh = cbind(dcast(DiameterRangeGene+N+Diameter~.,data=bs[bs$AlignmentName=="Hacke
            dcast(DiameterRangeGene~.,data=bs[bs$AlignmentName=="HackettGenes",],value.var = "rfw_err",fun.aggregate = mean)[,2])
 names(bh) = c("DiameterRangeGene","N","Diameter", "rf_res","rf_err")
 
-ggplot(aes(color=N,x=DiameterRangeGene,y=-(rf_err-rf_res)/(2*N-6)),data=bs[bs$AlignmentName=="16S.B",])+geom_jitter(width = 0.2,alpha=0.5)+
+ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=-(rf_err-rf_res)/(2*N-6)),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
   #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
-  theme_classic()+geom_boxplot(fill="transparent",color="red",outlier.alpha = 0,size=0.8)+
-  scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
   scale_y_continuous("Change in Normalized RF (after-before)",labels=percent)+
   scale_x_discrete(name="Diameter")+
   geom_hline(yintercept = 0)+
@@ -293,24 +296,46 @@ ggplot(aes(color=N,x=DiameterRangeGene,y=-(rf_err-rf_res)/(2*N-6)),data=bs[bs$Al
   ggsave("Figures/ErrParam_Figures/16S-RF.pdf",width = 5.2,height = 5)
 
 
-ggplot(aes(color=N,x=DiameterRangeGene,y=-(rfw_err-rfw_res)),data=bs[bs$AlignmentName=="16S.B",])+geom_jitter(width = 0.2,alpha=0.5)+
+ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=(rf_err-rf_res)/rf_err),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
   #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
-  theme_classic()+geom_boxplot(fill="transparent",color="red",outlier.alpha = 0,size=0.8)+
-  scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
+  scale_y_continuous("Relative reduction in  WRF",labels=percent)+
+  scale_x_discrete(name="Diameter")+
+  geom_hline(yintercept = 0)+
+  theme(legend.position = c(.2,.2),legend.direction = "horizontal", legend.text.align = 1)+
+  coord_cartesian(ylim=c(-2,1))+ggsave("Figures/ErrParam_Figures/16S-rel-RF.pdf",width = 5.2,height = 5)
+
+
+ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=-(rfw_err-rfw_res)),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
+  #facet_wrap(~AlignmentName)+
+  #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244")+
+  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
   scale_y_continuous("Change in  WRF (after-before)")+
   scale_x_discrete(name="Diameter")+
   geom_hline(yintercept = 0)+
   theme(legend.position = c(.2,.1),legend.direction = "horizontal", legend.text.align = 1)+
   ggsave("Figures/ErrParam_Figures/16S-RFw.pdf",width = 5.2,height = 5)
 
-ggplot(aes(color=rfw_err,x=DiameterRangeGene,y=(rfw_err-rfw_res)/rfw_err),data=bs[bs$AlignmentName=="16S.B",])+geom_jitter(width = 0.2,alpha=0.5)+
+ggplot(aes(color=AlignmentName,x=DiameterRangeGene,y=(rfw_err-rfw_res)/rfw_err),data=bs[bs$AlignmentName%in%c("16S.B","16S.B-Divvier"),])+
+  geom_jitter(alpha=0.5,position = position_jitterdodge())+
   #geom_point(aes(y=rf_res/(2*N-6)),color="red")+
-  theme_classic()+geom_boxplot(fill="transparent",color="red",outlier.alpha = 0,size=0.8)+
-  scale_color_gradient(low = "#55BBFF",high = "#112244",name="Error before")+
+  theme_classic()+
+  geom_boxplot(fill="transparent",outlier.alpha = 0,size=0.8)+
+  #scale_color_gradient(low = "#55BBFF",high = "#112244",name="Error before")+
+  scale_color_brewer(name="",palette = "Dark2" ,labels=c("TAPER","Divvier"))+
   scale_y_continuous("Relative reduction in  WRF",labels=percent)+
   scale_x_discrete(name="Diameter")+
   geom_hline(yintercept = 0)+
   theme(legend.position = c(.3,.1),legend.direction = "horizontal", legend.text.align = 0)+
+  coord_cartesian(ylim=c(-1.5,1.2))
   ggsave("Figures/ErrParam_Figures/16S-RFw-change.pdf",width = 5.2,height = 5)
 
 
