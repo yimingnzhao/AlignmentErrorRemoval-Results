@@ -1,0 +1,22 @@
+%latex.default(cbind(round(af[, 1:4], 2), Pvalue = round(af[,     5:5], 6), PctExp = round(afss/sum(afss) * 100, 1)), file = "16S-hackett.tex")%
+\begin{table}[!tbp]
+\begin{center}
+\begin{tabular}{lrrrrrr}
+\hline\hline
+\multicolumn{1}{l}{cbind}&\multicolumn{1}{c}{Df}&\multicolumn{1}{c}{Sum Sq}&\multicolumn{1}{c}{Mean Sq}&\multicolumn{1}{c}{F value}&\multicolumn{1}{c}{Pvalue}&\multicolumn{1}{c}{PctExp}\tabularnewline
+\hline
+ErrLenT&$   6$&$18.83$&$3.14$&$ 933.96$&$0.000000$&$30.9$\tabularnewline
+n&$   4$&$ 0.06$&$0.02$&$   4.79$&$0.000731$&$ 0.1$\tabularnewline
+Diameter&$   1$&$ 7.97$&$7.97$&$2372.92$&$0.000000$&$13.1$\tabularnewline
+N&$   1$&$ 0.10$&$0.10$&$  28.35$&$0.000000$&$ 0.2$\tabularnewline
+ErrLenT:Diameter&$   6$&$ 3.64$&$0.61$&$ 180.39$&$0.000000$&$ 6.0$\tabularnewline
+n:Diameter&$   4$&$ 0.17$&$0.04$&$  12.93$&$0.000000$&$ 0.3$\tabularnewline
+ErrLenT:N&$   6$&$ 0.18$&$0.03$&$   8.77$&$0.000000$&$ 0.3$\tabularnewline
+n:N&$   4$&$ 0.16$&$0.04$&$  11.57$&$0.000000$&$ 0.3$\tabularnewline
+Diameter:N&$   1$&$ 0.02$&$0.02$&$   6.96$&$0.008360$&$ 0.0$\tabularnewline
+ErrLenT:Diameter:N&$   6$&$ 0.10$&$0.02$&$   4.82$&$0.000064$&$ 0.2$\tabularnewline
+n:Diameter:N&$   4$&$ 0.01$&$0.00$&$   0.98$&$0.416159$&$ 0.0$\tabularnewline
+Residuals&$8860$&$29.76$&$0.00$&$$&$$&$48.8$\tabularnewline
+\hline
+\end{tabular}\end{center}
+\end{table}
