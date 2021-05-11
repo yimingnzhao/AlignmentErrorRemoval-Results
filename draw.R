@@ -8,6 +8,7 @@ d = d[d$N > 19 | !grepl("16S",d$E),]
 nlabels = c("1","2%","5%","10%","20%")
 #levels(d$DR)[levels(d$DR)=="concatenation"] <- "concat"
 
+
 d$n=with(d,as.factor(round(100/((NumErrSeqDiv==0&grepl("ErrLen$",E))*20+(NumErrSeqDiv!=N|grepl("ErrLen$",E))*NumErrSeqDiv+(NumErrSeqDiv==N&!grepl("ErrLen$",E))*100))))
 d$nb=d$n
 levels(d$n) <- c(levels(d$n)[1],paste(levels(d$n)[0:-1],"%",sep=""),"~5%")
@@ -26,25 +27,43 @@ d$SL = with(d,(TN+FP+FN+TP)/as.numeric(as.character(N)))
 d = d[d$ErrLen!=64 | !grepl("Hack",d$E),]
 d = d[!d$ErrLen==32 | !grepl("Hack",d$E) | d$SL>=704,]
 
+dc = d[d$E %in% c("16S.B-1-cutoffs" , "16S.B_General"),]
+
+d= d[d$E!="16S.B-1-cutoffs",]
 
 tb=t
 t = read.csv('CSV_Files/res_other_methods.csv',header=F)
 names(t)=c("AlignmentName" ,"DiameterRange" ,"X" ,"Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "real_time", "user_time", "sys_time", "FP", "FN", "TP", "TN")
 #t$time=as.numeric(sub("m.*","",t$real_time))*60+as.numeric(sub("s$","",sub(".*m","",t$real_time)))
+t = t[t$N > 19 | !grepl("16S",t$AlignmentName),]
 t$time=as.numeric(sub("user$","",sub("s$","",sub(".*m","",t$real_time)))) + as.numeric(ifelse(grepl("user",t$real_time), 0, sub("[m].*","",t$real_time)))*60
 t$AlignmentName
-t$DR2 = cut(t$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
 
-md= merge(t[t$AlignmentName=="16S.B-Divvier",],d[d$ErrLenT=="~50",],
+md= merge(t[t$AlignmentName=="16S.B-Divvier",],rbind(d[d$ErrLenT=="~50",],dc),
            by.y = c("DR","X","Diameter","PD","N","NumErrSeqDiv","Rep"),by.x=c("DiameterRange","X","Diameter","PD","N","NumErrSeqDiv","Rep"))
+
+head(md)
 t2=md[,c(18,1:5,9,6:7,10:12,24:27,17,20:23)]
 t3=md[,c(8,1:5,9,6:7,10:12,13:16,17,20:23)]
 names(t2) = names(t3) = c(names(t),c("FP0","FN0","TP0","TN0"))
 t4=rbind(t2,t3)
-t4$AlignmentName = factor(t4$AlignmentName,labels = c("16S.B","16S.B-Divvier"))
+t4$AlignmentName = factor(t4$AlignmentName,labels = c("16S.B","16S.B-1-cutoffs", "16S.B-Divvier"))
 t4$DR2 = cut(t4$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
 head(t4)
-  
+
+t$DR2 = cut(t$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
+
+
+tn = read.csv('CSV_Files/res_taper_multi_0.1.7.csv',header=F)
+names(tn)=c("AlignmentName" ,"DiameterRange" ,"X" ,"Diameter", "PD", "N", "ErrLen", "NumErrSeqDiv", "Rep", "FP0","FN0","TP0","TN0","FP", "FN", "TP", "TN")
+head(tn)
+tdm = merge(tn,d[d$ErrLenT=="~50",],by.y = c("DR","X","Diameter","PD","N","NumErrSeqDiv","Rep"),by.x=c("DiameterRange","X","Diameter","PD","N","NumErrSeqDiv","Rep"))
+tdm1 = tdm[,1:17]; names(tdm1)[9:17]=c("ErrLen", "FP0","FN0","TP0","TN0","FP", "FN", "TP", "TN")
+tdm2 = tdm[,c(1:7,18:27)]; names(tdm2)[8:17]=c("AlignmentName", "ErrLen", "FP0","FN0","TP0","TN0","FP", "FN", "TP", "TN")
+tdm=rbind(tdm1,tdm2)
+tdm$DR2 = cut(tdm$Diameter, breaks = c(0, 0.1, 0.2, 0.5, 0.8, 1), right = F)
+
+write.csv(tdm,"oldnew.csv")
 # Aggregate Sum function
 summ_roc <- function(d2,form) {
   ad2 = dcast(d2, form ,fun.aggregate=sum,value.var = c("FP"))
@@ -60,6 +79,19 @@ summ_roc <- function(d2,form) {
   names(ad2)[(length(names(ad2))-7):(length(names(ad2)))]=c("FP","FN","TP","TN", "FN0", "TP0", "TN0", "FP0")
   ad2
 }
+
+d2=summ_roc(tdm, AlignmentName+DR2~.)
+A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), DR=d2$DR2,E=d2$AlignmentName)
+ggplot(data=A, aes(x, y, shape=E,color=as.factor(DR))) + 
+  geom_point(alpha=1)+
+  geom_path(aes(group=DR),data=A[A$n!="~5%",],linetype=1)+
+  theme_bw()+theme(legend.position = "right",legend.text.align = 1)+
+  scale_shape_manual(name="Length, Freq",values=c(15,17,1,2,5,8,9,7,6,19,18,3,90),labels=c("new","old"))+
+  scale_color_brewer(name="Diameter",palette = "Dark2")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  scale_y_continuous("Recall",labels=percent)
+
+ggsave("old-new.pdf")
 
 # 16S.B: K - Recall vs Diameter
 ggplot(aes(x=Diameter,y=TP/(TP+FN), 
@@ -219,7 +251,7 @@ ggsave("Figures/ErrParam_Figures/16S.B_ErrLenNumErr_percenterror_arrow_log.pdf",
 
 
 ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DR2,xend=DR2),
-       data=data.table::dcast(setDT(t4[t4$AlignmentName %in% c("16S.B-Divvier", "16S.B_General") &t4$N>19,]),
+       data=data.table::dcast(setDT(t4[t4$AlignmentName %in% c("16S.B-Divvier", "16S.B","16S.B-1-cutoffs") &t4$N>19,]),
                               DR2+AlignmentName~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")))+
   #geom_boxplot(outlier.alpha = .5, outlier.size = 0.4)+#geom_point(alpha=0.5,size=1)+
   geom_segment(position = position_dodge2(width=0.8),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
@@ -232,7 +264,7 @@ ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DR2,xen
   facet_wrap(~"Changing methods")+
   #scale_x_discrete(name="Error Len, Freq")+
   #facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")),scales="free_x",shrink = T)+
-  scale_color_brewer(name="",palette = "Set2" ,labels=c("TAPER","Divvier"))+
+  scale_color_brewer(name="",palette = "Set2" ,labels=c("TAPER","TAPER (no 2D)","Divvier"))+
   ggsave("Figures/ErrParam_Figures/16SB_methods_arrow.pdf", width=2.5*1.2, height=4.8*1.2)
 
 ggplot(aes(color=AlignmentName,yend=FN/(FN+TN),y=(FN+TP)/(FN+FP+TP+TN),x=DR2,xend=DR2),
@@ -257,9 +289,9 @@ A = data.frame(x=d2$FP/(d2$FP+d2$TN),y=d2$TP/(d2$TP+d2$FN), DR2=d2$DR2,  Alignme
 ggplot(data=A, aes(x, y, shape=AlignmentName,color=DR2)) + 
   geom_point(alpha=0.99,size=2.5)+
   #geom_path(aes(group=interaction(AlignmentName)))+
-  theme_classic()+theme(legend.position = c(0.8,0.29),legend.text.align = 1,axis.title.y = element_text(vjust=-4),
+  theme_classic()+theme(legend.position = c(0.75,0.32),legend.text.align = 1,axis.title.y = element_text(vjust=-4),
                         plot.tag.position = c(0.075, 0.975),plot.tag = element_text(size=15,face = "bold"))+labs(tag = "b)")+
-  scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("TAPER","Divvier"))+
+  scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("TAPER","TAPER-n", "Divvier"))+
   scale_color_brewer(name="",palette = "Dark2")+
   #scale_size_discrete(name="Diameter")+
   scale_x_continuous(name="FPR")+
@@ -279,7 +311,7 @@ ins=qplot(AlignmentName,time/60,data=t[!is.na(t$DR2),c("AlignmentName","DR2","ti
 sort(t[!is.na(t$DR2),c("time")])
 
 #merge(A[,c(3,4,1,2)],melt(dcast(DR2~AlignmentName,data=t[!is.na(t$DR2),c("AlignmentName","DR2","time")],fun.aggregate = mean)),by.x=1:2,by.y=1:2)
-ggplot(data=A, 
+ggplot(data=A[A$AlignmentName!="16S.B-1-cutoffs",], 
        aes(x, y, shape=AlignmentName,color=DR2)) + 
   geom_point(alpha=0.99,size=2.5)+
   #geom_path(aes(group=interaction(AlignmentName)))+
@@ -296,6 +328,21 @@ ggplot(data=A,
   annotation_custom(ggplotGrob(ins), xmin = 0.0135, xmax = 0.032, ymin = 0.832, ymax = 0.901)+
 ggsave("Figures/ErrParam_Figures/16SB_methods.pdf",width = 3.75,height = 3.8)
 
+
+ggplot(data=A[A$AlignmentName!="16S.B-Divvier",], 
+       aes(x, y, shape=AlignmentName,color=DR2)) + 
+  geom_point(alpha=0.99,size=2.5)+
+  #geom_path(aes(group=interaction(AlignmentName)))+
+  theme_classic()+
+  theme(legend.position = c(0.73,0.93),legend.direction = "vertical")+
+  scale_shape_manual(name="",values=c(15,17,16,18,3,90),labels=c("Default","No Step 4 (p=q=c=1)"))+
+  scale_color_brewer(name="",palette = "Dark2", guide="none")+
+  #scale_size_discrete(name="Diameter")+
+  scale_x_continuous(name="FPR",labels=percent)+
+  geom_text(aes(label=DR2),nudge_y = -0.0045,nudge_x=0.00002,size=2.5,data=A[A$AlignmentName=="16S.B-1-cutoffs",])+
+  #geom_text(aes(label=paste(round(value/60,1),"m")),nudge_y = -0.0035,nudge_x=0.0004,size=2.3)+
+  scale_y_continuous("Recall",labels=percent)+
+  ggsave("Figures/ErrParam_Figures/16SB_TAPER_Vars.pdf",width = 3.75,height = 3.8)
 
 #+ ggsave("Figures/ErrParam_Figures/16SB_methods_mins.pdf",width = 1.7,height = 3.8)
 
@@ -1324,3 +1371,74 @@ ggplot(data=A[A$ErrLen <= 64,], aes(x, y, color=as.factor(ErrLen), shape=as.fact
 ggsave("Figures/ErrParam_Figures/16SB_K_byK_faceted.pdf", width=10, height=8)
 
 
+
+
+##########################################
+
+
+hr = read.csv('CSV_Files/hacket_removed.csv',sep=" ",header=F)
+head(hr)
+hr$V14
+
+htree = read.table("CSV_Files/Hacket-distances.csv", check.names=FALSE)
+hm = merge(hr,data.frame(t(htree[1,]),taxon=rownames(t(htree[1,]))),by.x="V12",by.y="taxon")
+head(hm)
+nrow(hm)
+nrow(hr)
+
+source("ggplot_smooth_func.R")
+
+ggplot(aes(x=Alligator, y=V14),data=hm[,])+
+  theme_classic()+
+  xlab("Distance to Alligator")+ylab("Mean number of nucleotides removed")+
+  #stat_summary(fun.y=sum,color="darkgreen")+
+  stat_summary(color="blue",fun.data = mean_se,size=.33,alpha=0.5)+
+  facet_wrap((ifelse(V4==V6,1,V6))~V5,scales="free_y",ncol=2)+
+  stat_smooth(se=F,method="lm",color="red")+
+  #geom_jitter(size=0.1)+
+  stat_smooth_func(geom="text",method="lm",hjust=0,parse=TRUE,color="red",size=3,xpos=0) +
+  theme(axis.text.x=element_text(angle=90,size=7))+
+  ggsave("Figures/ErrParam_Figures/Hacket-removed-len.pdf",width=8.8,height=11)
+
+
+############################################
+ggplot(read.csv('CSV_Files/gatsey-err-len.csv'),aes(x=L))+stat_ecdf()+
+  geom_vline(xintercept = 20,color="red",linetype=2)+theme_bw()+
+  xlab("Error length")+ylab("ECDF")+ggsave("Figures/ErrParam_Figures/bio-errlen.pdf",width=5,height = 5)
+
+
+##########################################
+require(reshape2); require(ggplot2); require(scales)
+
+d=(read.csv('CSV_Files/st-likelihood.txt',he=F,sep=' '))
+
+rc=read.csv('CSV_Files/removed-count-default.txt',head=F,sep=' '); 
+gtl=read.csv('CSV_Files/genetree-like.txt',sep=" ",header=F); 
+m=merge(dcast(V1~V2,data=d[,c(1,2,6)]),rc);names(m)[5:6]=c("removed","all");m=merge(m,dcast(V1~V2,data=gtl[,c(1,2,9)]),by="V1")
+
+
+
+ggplot(aes(x=removed/all,y=(before-after)/before),data=m)+
+  geom_point(aes(shape="ST"),alpha=0.66)+
+  geom_point(aes(y=(before-befored.randomremoved)/before,shape="ST"),color="red",alpha=0.5)+
+  scale_x_continuous(labels=percent,name="Portition of nucleotides removed")+
+  scale_y_continuous(labels=percent,name="Increase in likelihood")+
+  theme_bw()+
+  geom_text(aes(label=V1),size=0,nudge_y=0.0033,data=m[m$removed/m$all>.002,])+
+  geom_point(aes(y=(before.gt-after.gt)/before.gt,shape="GT"),alpha=0.66)+
+  geom_point(aes(y=(before.gt-randomremoved.gt)/before.gt,shape="GT"),color="red",alpha=0.5)+
+  scale_shape(name="")+theme(legend.position=c(.1,.8))+
+  ggsave("st-likelihood.pdf",width=5,height=3.5);
+
+ggplot(aes(x=reorder(V1,removed/all),y=(before-after)/before),data=m)+
+  geom_point(aes(shape="ST"),alpha=0.66)+
+  geom_point(aes(y=(before-befored.randomremoved)/before),color="red",alpha=0.5)+
+  scale_y_continuous(labels=percent,name="Increase in likelihood")+
+  theme_bw()+
+  geom_text(aes(label=V1),size=0,nudge_y=0.0033,data=m[m$removed/m$all>.002,])+
+  geom_point(aes(y=(before.gt-after.gt)/before.gt,shape="GT"),alpha=0.66)+
+  scale_shape(name="")+theme(legend.position=c(.1,.8),axis.text.x=element_text(angle=90))+
+  scale_x_discrete(name="genes (ordered by portion removed)")+
+  ggsave("likelihood-by-gene.pdf",width=6.5,height=3.5)
+
+qplot(reorder(V2,`.`), `.`,data=recast(read.csv('CSV_Files/removed-length.txt',sep=' ',h=F),V2~.,fun.ag=sum,measure.var="V3"))+theme_bw()+xlab("species")+ylab("total nucleotides removed")+theme(axis.text.x=element_text(angle=90))+ggsave("removed-len.pdf",width=8,height=4)
