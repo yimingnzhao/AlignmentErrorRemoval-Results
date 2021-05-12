@@ -1,0 +1,265 @@
+1001/defaultOUTPUT.fasta 2331 45 
+remove from 17 line 34 at 1678
+1005/defaultOUTPUT.fasta 924 44 
+remove from 17 line 34 at 880
+1013/defaultOUTPUT.fasta 1389 44 
+remove from 10 line 20 at 1137
+remove from 16 line 32 at 557
+remove from 5 line 10 at 429
+remove from 19 line 38 at 368
+1014/defaultOUTPUT.fasta 2157 46 
+remove from 33 line 66 at 91
+remove from 17 line 34 at 83
+remove from 8 line 16 at 386
+remove from 2 line 4 at 1907
+1016/defaultOUTPUT.fasta 2955 48 
+remove from 5 line 10 at 2409
+remove from 15 line 30 at 1062
+remove from 26 line 52 at 2308
+remove from 2 line 4 at 2878
+remove from 9 line 18 at 2922
+remove from 37 line 74 at 29
+remove from 32 line 64 at 1250
+1020/defaultOUTPUT.fasta 2547 45 
+remove from 22 line 44 at 205
+remove from 17 line 34 at 105
+remove from 21 line 42 at 2170
+remove from 28 line 56 at 1960
+remove from 4 line 8 at 1341
+remove from 10 line 20 at 56
+remove from 19 line 38 at 796
+1025/defaultOUTPUT.fasta 2577 44 
+remove from 39 line 78 at 908
+remove from 9 line 18 at 1743
+remove from 7 line 14 at 1163
+remove from 26 line 52 at 1341
+remove from 11 line 22 at 1682
+remove from 39 line 78 at 96
+remove from 33 line 66 at 24
+remove from 30 line 60 at 1075
+remove from 13 line 26 at 1207
+remove from 28 line 56 at 632
+remove from 13 line 26 at 275
+1027/defaultOUTPUT.fasta 3462 44 
+remove from 22 line 44 at 2210
+1028/defaultOUTPUT.fasta 1413 45 
+remove from 1 line 2 at 1105
+remove from 15 line 30 at 1362
+remove from 32 line 64 at 535
+remove from 28 line 56 at 507
+remove from 7 line 14 at 1083
+remove from 24 line 48 at 875
+remove from 39 line 78 at 24
+1029/defaultOUTPUT.fasta 570 46 
+remove from 18 line 36 at 546
+1035/defaultOUTPUT.fasta 855 47 
+remove from 24 line 48 at 441
+1036/defaultOUTPUT.fasta 1647 43 
+remove from 12 line 24 at 74
+remove from 13 line 26 at 1565
+remove from 17 line 34 at 1038
+remove from 40 line 80 at 1097
+1037/defaultOUTPUT.fasta 1290 47 
+remove from 10 line 20 at 1038
+1038/defaultOUTPUT.fasta 945 48 
+1039/defaultOUTPUT.fasta 2253 45 
+remove from 16 line 32 at 90
+remove from 10 line 20 at 1624
+remove from 27 line 54 at 22
+remove from 44 line 88 at 143
+remove from 23 line 46 at 1949
+remove from 27 line 54 at 199
+remove from 28 line 56 at 1728
+remove from 6 line 12 at 72
+remove from 12 line 24 at 1667
+1040/defaultOUTPUT.fasta 762 42 
+remove from 2 line 4 at 226
+remove from 42 line 84 at 34
+remove from 16 line 32 at 617
+1042/defaultOUTPUT.fasta 1311 46 
+remove from 16 line 32 at 447
+remove from 30 line 60 at 916
+remove from 6 line 12 at 1038
+remove from 5 line 10 at 120
+remove from 13 line 26 at 399
+remove from 21 line 42 at 384
+remove from 22 line 44 at 45
+remove from 23 line 46 at 1264
+1044/defaultOUTPUT.fasta 4011 46 
+remove from 15 line 30 at 2804
+remove from 5 line 10 at 2339
+remove from 32 line 64 at 2140
+remove from 34 line 68 at 3365
+remove from 36 line 72 at 1442
+remove from 41 line 82 at 1151
+remove from 13 line 26 at 3194
+remove from 41 line 82 at 3567
+remove from 35 line 70 at 450
+remove from 8 line 16 at 3220
+remove from 11 line 22 at 2322
+remove from 38 line 76 at 2955
+remove from 7 line 14 at 3480
+remove from 5 line 10 at 3019
+remove from 26 line 52 at 1901
+remove from 41 line 82 at 2395
+remove from 8 line 16 at 2261
+1045/defaultOUTPUT.fasta 1938 45 
+remove from 42 line 84 at 415
+remove from 32 line 64 at 578
+1049/defaultOUTPUT.fasta 5712 46 
+remove from 30 line 60 at 4433
+remove from 7 line 14 at 168
+1050/defaultOUTPUT.fasta 1449 44 
+1054/defaultOUTPUT.fasta 1920 47 
+remove from 20 line 40 at 1790
+remove from 33 line 66 at 697
+remove from 7 line 14 at 1042
+remove from 33 line 66 at 1256
+1056/defaultOUTPUT.fasta 603 46 
+1062/defaultOUTPUT.fasta 1482 47 
+remove from 40 line 80 at 582
+1066/defaultOUTPUT.fasta 1368 43 
+remove from 21 line 42 at 813
+remove from 20 line 40 at 497
+remove from 15 line 30 at 146
+remove from 10 line 20 at 948
+1067/defaultOUTPUT.fasta 984 48 
+remove from 33 line 66 at 867
+1077/defaultOUTPUT.fasta 1842 44 
+remove from 36 line 72 at 1065
+remove from 19 line 38 at 1123
+remove from 1 line 2 at 911
+remove from 34 line 68 at 430
+1078/defaultOUTPUT.fasta 2868 46 
+1079/defaultOUTPUT.fasta 1890 47 
+remove from 36 line 72 at 474
+remove from 21 line 42 at 747
+1083/defaultOUTPUT.fasta 414 47 
+remove from 10 line 20 at 198
+remove from 16 line 32 at 23
+1085/defaultOUTPUT.fasta 1662 42 
+remove from 32 line 64 at 1199
+1087/defaultOUTPUT.fasta 2697 46 
+remove from 43 line 86 at 1689
+remove from 7 line 14 at 2417
+remove from 38 line 76 at 1909
+remove from 14 line 28 at 1716
+remove from 44 line 88 at 2272
+remove from 2 line 4 at 1281
+remove from 39 line 78 at 1138
+remove from 11 line 22 at 2113
+remove from 22 line 44 at 974
+1089/defaultOUTPUT.fasta 1377 48 
+remove from 11 line 22 at 1141
+remove from 25 line 50 at 743
+remove from 20 line 40 at 103
+1094/defaultOUTPUT.fasta 3891 47 
+remove from 28 line 56 at 3454
+remove from 19 line 38 at 2811
+remove from 9 line 18 at 664
+remove from 9 line 18 at 2977
+remove from 11 line 22 at 2419
+remove from 43 line 86 at 1585
+remove from 27 line 54 at 3396
+remove from 23 line 46 at 520
+remove from 34 line 68 at 1298
+remove from 36 line 72 at 1686
+1097/defaultOUTPUT.fasta 2418 43 
+remove from 34 line 68 at 1471
+remove from 27 line 54 at 818
+remove from 10 line 20 at 182
+remove from 16 line 32 at 1831
+remove from 10 line 20 at 271
+remove from 5 line 10 at 1942
+remove from 8 line 16 at 563
+remove from 14 line 28 at 704
+remove from 18 line 36 at 1377
+remove from 12 line 24 at 34
+remove from 17 line 34 at 2247
+remove from 35 line 70 at 1616
+1098/defaultOUTPUT.fasta 1101 46 
+remove from 27 line 54 at 830
+remove from 30 line 60 at 274
+remove from 10 line 20 at 917
+12/defaultOUTPUT.fasta 819 42 
+16/defaultOUTPUT.fasta 3063 47 
+remove from 8 line 16 at 2683
+remove from 10 line 20 at 2248
+remove from 24 line 48 at 1481
+remove from 21 line 42 at 1090
+20/defaultOUTPUT.fasta 1590 45 
+remove from 7 line 14 at 328
+remove from 21 line 42 at 207
+remove from 43 line 86 at 1338
+remove from 10 line 20 at 129
+28/defaultOUTPUT.fasta 276 44 
+remove from 6 line 12 at 250
+30/defaultOUTPUT.fasta 1335 44 
+remove from 21 line 42 at 1244
+remove from 6 line 12 at 61
+remove from 32 line 64 at 1062
+37/defaultOUTPUT.fasta 909 46 
+44/defaultOUTPUT.fasta 930 48 
+remove from 6 line 12 at 448
+remove from 19 line 38 at 40
+remove from 13 line 26 at 723
+remove from 36 line 72 at 730
+remove from 36 line 72 at 863
+5/defaultOUTPUT.fasta 2415 45 
+remove from 25 line 50 at 1820
+remove from 17 line 34 at 2258
+remove from 6 line 12 at 1176
+remove from 45 line 90 at 1594
+remove from 14 line 28 at 2064
+remove from 9 line 18 at 1305
+remove from 11 line 22 at 859
+remove from 44 line 88 at 752
+remove from 35 line 70 at 1630
+remove from 29 line 58 at 1850
+remove from 44 line 88 at 1458
+51/defaultOUTPUT.fasta 1365 46 
+56/defaultOUTPUT.fasta 1131 47 
+remove from 21 line 42 at 85
+remove from 27 line 54 at 659
+remove from 21 line 42 at 1034
+remove from 3 line 6 at 843
+remove from 10 line 20 at 852
+remove from 12 line 24 at 455
+remove from 22 line 44 at 943
+62/defaultOUTPUT.fasta 645 47 
+64/defaultOUTPUT.fasta 2691 44 
+remove from 36 line 72 at 2307
+remove from 23 line 46 at 1393
+remove from 34 line 68 at 536
+74/defaultOUTPUT.fasta 279 48 
+82/defaultOUTPUT.fasta 999 46 
+remove from 40 line 80 at 705
+remove from 10 line 20 at 141
+remove from 6 line 12 at 756
+remove from 34 line 68 at 548
+84/defaultOUTPUT.fasta 1620 44 
+remove from 15 line 30 at 796
+88/defaultOUTPUT.fasta 1341 46 
+remove from 18 line 36 at 1005
+remove from 22 line 44 at 1020
+89/defaultOUTPUT.fasta 999 45 
+remove from 28 line 56 at 133
+remove from 5 line 10 at 64
+remove from 17 line 34 at 204
+remove from 23 line 46 at 73
+remove from 29 line 58 at 722
+remove from 30 line 60 at 564
+90/defaultOUTPUT.fasta 1590 44 
+remove from 20 line 40 at 1520
+remove from 27 line 54 at 1431
+remove from 37 line 74 at 921
+remove from 31 line 62 at 915
+remove from 28 line 56 at 817
+remove from 8 line 16 at 1092
+93/defaultOUTPUT.fasta 774 45 
+remove from 32 line 64 at 70
+99/defaultOUTPUT.fasta 1041 46 
+remove from 25 line 50 at 799
+remove from 31 line 62 at 793
+remove from 10 line 20 at 740
+remove from 46 line 92 at 961
