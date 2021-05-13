@@ -1,0 +1,81 @@
+IMPORTANT WARNING: Alignment column 832 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1579 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1580 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1581 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1644 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1645 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1646 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 1647 contains only undetermined values which will be treated as missing data
+
+IMPORTANT WARNING
+Found 8 columns that contain only undetermined values which will be treated as missing data.
+Normally these columns should be excluded from the analysis.
+
+Just in case you might need it, an alignment file with 
+undetermined columns removed is printed to file 1097//OUTPUT.phylip.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 1051 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 23.82%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 1051
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxml -s 1097//OUTPUT.phylip -m GTRGAMMA -n score-after -t 1097//ap.tre -f e -w 1097/ 
+
+
+
+
+Overall Time for Tree Evaluation 7.999080
+Final GAMMA  likelihood: -16756.477714
+Number of free parameters for AIC-TEST(BR-LEN): 92
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 0.233006
+Tree-Length: 3.312787
+rate A <-> C: 0.561583
+rate A <-> G: 3.370056
+rate A <-> T: 0.884304
+rate C <-> G: 0.966838
+rate C <-> T: 5.100073
+rate G <-> T: 1.000000
+
+freq pi(A): 0.236722
+freq pi(C): 0.289265
+freq pi(G): 0.307911
+freq pi(T): 0.166102
+
+Final tree written to:                 /home/smirarab/projects/taper/Taper-Results/1097/RAxML_result.score-after
+Execution Log File written to:         /home/smirarab/projects/taper/Taper-Results/1097/RAxML_log.score-after

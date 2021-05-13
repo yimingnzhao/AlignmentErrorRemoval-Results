@@ -1,0 +1,101 @@
+IMPORTANT WARNING: Alignment column 643 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 644 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 645 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 646 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 647 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 648 contains only undetermined values which will be treated as missing data
+
+IMPORTANT WARNING
+Found 6 columns that contain only undetermined values which will be treated as missing data.
+Normally these columns should be excluded from the analysis.
+
+An alignment file with undetermined columns removed has already
+been printed to file 1054/OUTPUT.phylip.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 710 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 17.25%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 10 inferences on the original alignment using 10 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 710
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxmlp -T4 -s 1054/OUTPUT.phylip -n after10 -m GTRGAMMA -w 1054 -N 10 
+
+
+Inference[0]: Time 12.454012 GAMMA-based likelihood -12718.255265, best rearrangement setting 15
+alpha[0]: 0.204414 rates[0] ac ag at cg ct gt: 0.835866 4.354460 0.308226 1.711463 3.445147 1.000000 
+Inference[1]: Time 15.062618 GAMMA-based likelihood -12703.934168, best rearrangement setting 15
+alpha[0]: 0.203684 rates[0] ac ag at cg ct gt: 0.863973 4.444906 0.294427 1.712633 3.474729 1.000000 
+Inference[2]: Time 13.942740 GAMMA-based likelihood -12710.149642, best rearrangement setting 10
+alpha[0]: 0.204105 rates[0] ac ag at cg ct gt: 0.832348 4.449741 0.290938 1.739087 3.272858 1.000000 
+Inference[3]: Time 20.483951 GAMMA-based likelihood -12707.242615, best rearrangement setting 15
+alpha[0]: 0.201031 rates[0] ac ag at cg ct gt: 0.836886 4.474263 0.279536 1.706644 3.348753 1.000000 
+Inference[4]: Time 21.136901 GAMMA-based likelihood -12704.221536, best rearrangement setting 10
+alpha[0]: 0.203927 rates[0] ac ag at cg ct gt: 0.839385 4.331909 0.288196 1.702257 3.320164 1.000000 
+Inference[5]: Time 22.090397 GAMMA-based likelihood -12706.068962, best rearrangement setting 5
+alpha[0]: 0.203154 rates[0] ac ag at cg ct gt: 0.837550 4.474413 0.291619 1.737687 3.344448 1.000000 
+Inference[6]: Time 21.961317 GAMMA-based likelihood -12700.655968, best rearrangement setting 10
+alpha[0]: 0.203393 rates[0] ac ag at cg ct gt: 0.842519 4.377538 0.284346 1.746603 3.366433 1.000000 
+Inference[7]: Time 23.494257 GAMMA-based likelihood -12711.195945, best rearrangement setting 10
+alpha[0]: 0.203950 rates[0] ac ag at cg ct gt: 0.843820 4.468349 0.297195 1.729362 3.362654 1.000000 
+Inference[8]: Time 14.174575 GAMMA-based likelihood -12706.311257, best rearrangement setting 15
+alpha[0]: 0.202705 rates[0] ac ag at cg ct gt: 0.879893 4.514142 0.298806 1.721736 3.452743 1.000000 
+Inference[9]: Time 11.584371 GAMMA-based likelihood -12703.303367, best rearrangement setting 5
+alpha[0]: 0.203363 rates[0] ac ag at cg ct gt: 0.824214 4.377283 0.273133 1.728042 3.302632 1.000000 
+
+
+Conducting final model optimizations on all 10 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -12715.214358 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.0
+Inference[1] final GAMMA-based Likelihood: -12700.845641 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.1
+Inference[2] final GAMMA-based Likelihood: -12706.951647 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.2
+Inference[3] final GAMMA-based Likelihood: -12703.935658 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.3
+Inference[4] final GAMMA-based Likelihood: -12701.028603 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.4
+Inference[5] final GAMMA-based Likelihood: -12703.293441 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.5
+Inference[6] final GAMMA-based Likelihood: -12696.892780 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.6
+Inference[7] final GAMMA-based Likelihood: -12707.587020 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.7
+Inference[8] final GAMMA-based Likelihood: -12703.275341 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.8
+Inference[9] final GAMMA-based Likelihood: -12700.098401 tree written to file /home/smirarab/projects/taper/Taper-Results/1054/RAxML_result.after10.RUN.9
+
+
+Starting final GAMMA-based thorough Optimization on tree 6 likelihood -12696.892780 .... 
+
+Final GAMMA-based Score of best tree -12696.892780
+
+Program execution info written to /home/smirarab/projects/taper/Taper-Results/1054/RAxML_info.after10
+Best-scoring ML tree written to: /home/smirarab/projects/taper/Taper-Results/1054/RAxML_bestTree.after10
+
+Overall execution time: 181.288035 secs or 0.050358 hours or 0.002098 days
+

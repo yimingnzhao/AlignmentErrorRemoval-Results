@@ -1,0 +1,66 @@
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 405 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 16.98%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 405
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxml -s 44//OUTPUT.randomremoved.phylip -m GTRGAMMA -n score-after.randomremoved -t 44//ap.tre -f e -w 44/ 
+
+
+
+
+Overall Time for Tree Evaluation 2.066165
+Final GAMMA  likelihood: -7261.083077
+Number of free parameters for AIC-TEST(BR-LEN): 102
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 0.255638
+Tree-Length: 3.485020
+rate A <-> C: 1.079767
+rate A <-> G: 4.987482
+rate A <-> T: 0.261783
+rate C <-> G: 1.617575
+rate C <-> T: 8.166940
+rate G <-> T: 1.000000
+
+freq pi(A): 0.206859
+freq pi(C): 0.270784
+freq pi(G): 0.276991
+freq pi(T): 0.245366
+
+Final tree written to:                 /home/smirarab/projects/taper/Taper-Results/44/RAxML_result.score-after.randomremoved
+Execution Log File written to:         /home/smirarab/projects/taper/Taper-Results/44/RAxML_log.score-after.randomremoved
