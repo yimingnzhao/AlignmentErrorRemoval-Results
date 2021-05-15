@@ -1,0 +1,75 @@
+IMPORTANT WARNING: Alignment column 896 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 897 contains only undetermined values which will be treated as missing data
+
+IMPORTANT WARNING
+Found 2 columns that contain only undetermined values which will be treated as missing data.
+Normally these columns should be excluded from the analysis.
+
+An alignment file with undetermined columns removed has already
+been printed to file 84//sate.default.pep2cds.removed.noout.aligned.phylip.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 1125 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 13.38%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 1125
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxml -s 84//sate.default.pep2cds.removed.noout.aligned.phylip -m GTRGAMMA -n score -t 84//ap.tre -f e -w 84/ 
+
+
+
+
+Overall Time for Tree Evaluation 4.780632
+Final GAMMA  likelihood: -19409.951129
+Number of free parameters for AIC-TEST(BR-LEN): 94
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 0.465182
+Tree-Length: 4.593277
+rate A <-> C: 1.362171
+rate A <-> G: 7.105679
+rate A <-> T: 0.422190
+rate C <-> G: 2.034812
+rate C <-> T: 4.188047
+rate G <-> T: 1.000000
+
+freq pi(A): 0.154468
+freq pi(C): 0.301242
+freq pi(G): 0.274550
+freq pi(T): 0.269740
+
+Final tree written to:                 /home/smirarab/projects/taper/84/RAxML_result.score
+Execution Log File written to:         /home/smirarab/projects/taper/84/RAxML_log.score

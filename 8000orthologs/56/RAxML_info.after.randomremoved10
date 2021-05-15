@@ -1,0 +1,88 @@
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 508 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 14.55%
+
+RAxML rapid hill-climbing mode
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+Executing 10 inferences on the original alignment using 10 distinct randomized MP trees
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 508
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxmlp -T4 -s 56/OUTPUT.randomremoved.phylip -n after.randomremoved10 -m GTRGAMMA -w 56 -N 10 
+
+
+Inference[0]: Time 9.881047 GAMMA-based likelihood -8832.817109, best rearrangement setting 15
+alpha[0]: 0.263835 rates[0] ac ag at cg ct gt: 0.696248 2.861998 0.328433 1.373088 4.037642 1.000000 
+Inference[1]: Time 5.795574 GAMMA-based likelihood -8833.181093, best rearrangement setting 15
+alpha[0]: 0.264602 rates[0] ac ag at cg ct gt: 0.774240 3.108181 0.351824 1.419344 4.203581 1.000000 
+Inference[2]: Time 10.677189 GAMMA-based likelihood -8832.760778, best rearrangement setting 15
+alpha[0]: 0.265404 rates[0] ac ag at cg ct gt: 0.738199 2.947800 0.343123 1.428934 4.138952 1.000000 
+Inference[3]: Time 16.360982 GAMMA-based likelihood -8833.394469, best rearrangement setting 5
+alpha[0]: 0.267465 rates[0] ac ag at cg ct gt: 0.702700 2.859168 0.322355 1.366885 3.897114 1.000000 
+Inference[4]: Time 5.913517 GAMMA-based likelihood -8835.111107, best rearrangement setting 15
+alpha[0]: 0.264574 rates[0] ac ag at cg ct gt: 0.699505 2.850783 0.334816 1.382124 4.019542 1.000000 
+Inference[5]: Time 12.922296 GAMMA-based likelihood -8836.482067, best rearrangement setting 5
+alpha[0]: 0.269573 rates[0] ac ag at cg ct gt: 0.769451 3.090329 0.361961 1.446584 4.196712 1.000000 
+Inference[6]: Time 10.031020 GAMMA-based likelihood -8832.383082, best rearrangement setting 10
+alpha[0]: 0.261775 rates[0] ac ag at cg ct gt: 0.727998 2.989441 0.341477 1.416446 4.162970 1.000000 
+Inference[7]: Time 8.608697 GAMMA-based likelihood -8832.984310, best rearrangement setting 10
+alpha[0]: 0.263543 rates[0] ac ag at cg ct gt: 0.698376 2.850400 0.323154 1.366090 3.942744 1.000000 
+Inference[8]: Time 7.196457 GAMMA-based likelihood -8831.978039, best rearrangement setting 10
+alpha[0]: 0.261733 rates[0] ac ag at cg ct gt: 0.733824 3.008163 0.343050 1.427297 4.191315 1.000000 
+Inference[9]: Time 12.672470 GAMMA-based likelihood -8836.905204, best rearrangement setting 10
+alpha[0]: 0.263582 rates[0] ac ag at cg ct gt: 0.708677 2.841811 0.305249 1.359045 3.965692 1.000000 
+
+
+Conducting final model optimizations on all 10 trees under GAMMA-based models ....
+
+Inference[0] final GAMMA-based Likelihood: -8829.823699 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.0
+Inference[1] final GAMMA-based Likelihood: -8831.622301 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.1
+Inference[2] final GAMMA-based Likelihood: -8830.554993 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.2
+Inference[3] final GAMMA-based Likelihood: -8830.009344 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.3
+Inference[4] final GAMMA-based Likelihood: -8832.141981 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.4
+Inference[5] final GAMMA-based Likelihood: -8834.599219 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.5
+Inference[6] final GAMMA-based Likelihood: -8830.267493 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.6
+Inference[7] final GAMMA-based Likelihood: -8829.813944 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.7
+Inference[8] final GAMMA-based Likelihood: -8830.009470 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.8
+Inference[9] final GAMMA-based Likelihood: -8833.629855 tree written to file /home/smirarab/projects/taper/Taper-Results/56/RAxML_result.after.randomremoved10.RUN.9
+
+
+Starting final GAMMA-based thorough Optimization on tree 7 likelihood -8829.813944 .... 
+
+Final GAMMA-based Score of best tree -8829.813944
+
+Program execution info written to /home/smirarab/projects/taper/Taper-Results/56/RAxML_info.after.randomremoved10
+Best-scoring ML tree written to: /home/smirarab/projects/taper/Taper-Results/56/RAxML_bestTree.after.randomremoved10
+
+Overall execution time: 101.966387 secs or 0.028324 hours or 0.001180 days
+

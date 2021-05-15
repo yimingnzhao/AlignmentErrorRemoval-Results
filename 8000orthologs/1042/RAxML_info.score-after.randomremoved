@@ -1,0 +1,77 @@
+IMPORTANT WARNING: Alignment column 711 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 712 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 713 contains only undetermined values which will be treated as missing data
+IMPORTANT WARNING: Alignment column 714 contains only undetermined values which will be treated as missing data
+
+IMPORTANT WARNING
+Found 4 columns that contain only undetermined values which will be treated as missing data.
+Normally these columns should be excluded from the analysis.
+
+An alignment file with undetermined columns removed has already
+been printed to file 1042//OUTPUT.randomremoved.phylip.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 488 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 27.03%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 488
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxml -s 1042//OUTPUT.randomremoved.phylip -m GTRGAMMA -n score-after.randomremoved -t 1042//ap.tre -f e -w 1042/ 
+
+
+
+
+Overall Time for Tree Evaluation 2.131328
+Final GAMMA  likelihood: -8135.592876
+Number of free parameters for AIC-TEST(BR-LEN): 98
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 0.232791
+Tree-Length: 2.516254
+rate A <-> C: 1.121604
+rate A <-> G: 2.772542
+rate A <-> T: 0.444543
+rate C <-> G: 0.917544
+rate C <-> T: 4.442228
+rate G <-> T: 1.000000
+
+freq pi(A): 0.264953
+freq pi(C): 0.251545
+freq pi(G): 0.280065
+freq pi(T): 0.203437
+
+Final tree written to:                 /home/smirarab/projects/taper/Taper-Results/1042/RAxML_result.score-after.randomremoved
+Execution Log File written to:         /home/smirarab/projects/taper/Taper-Results/1042/RAxML_log.score-after.randomremoved

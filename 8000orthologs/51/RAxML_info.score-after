@@ -1,0 +1,76 @@
+
+
+IMPORTANT WARNING: Sequences HALLE and HALAL are exactly identical
+
+IMPORTANT WARNING
+Found 1 sequence that is exactly identical to other sequences in the alignment.
+Normally they should be excluded from the analysis.
+
+Just in case you might need it, an alignment file with 
+sequence duplicates removed is printed to file 51//OUTPUT.phylip.reduced
+
+
+This is RAxML version 7.2.6 released by Alexandros Stamatakis in February 2010.
+
+With greatly appreciated code contributions by:
+Andre Aberer (TUM)
+Simon Berger (TUM)
+John Cazes (TACC)
+Michael Ott (TUM)
+Nick Pattengale (UNM)
+Wayne Pfeiffer (SDSC)
+
+
+Alignment has 669 distinct alignment patterns
+
+Proportion of gaps and completely undetermined characters in this alignment: 15.25%
+
+RAxML Model Optimization up to an accuracy of 0.100000 log likelihood units
+
+Using 1 distinct models/data partitions with joint branch length optimization
+
+
+All free model parameters will be estimated by RAxML
+GAMMA model of rate heteorgeneity, ML estimate of alpha-parameter
+
+GAMMA Model parameters will be estimated up to an accuracy of 0.1000000000 Log Likelihood units
+
+Partition: 0
+Alignment Patterns: 669
+Name: No Name Provided
+DataType: DNA
+Substitution Matrix: GTR
+
+
+
+
+RAxML was called as follows:
+
+/home/smirarab/workspace/pasta/bin/raxml -s 51//OUTPUT.phylip -m GTRGAMMA -n score-after -t 51//ap.tre -f e -w 51/ 
+
+
+
+
+Overall Time for Tree Evaluation 4.717276
+Final GAMMA  likelihood: -9882.113793
+Number of free parameters for AIC-TEST(BR-LEN): 98
+Number of free parameters for AIC-TEST(NO-BR-LEN): 9
+
+
+Model Parameters of Partition 0, Name: No Name Provided, Type of Data: DNA
+alpha: 0.463588
+Tree-Length: 1.711843
+rate A <-> C: 1.141356
+rate A <-> G: 3.856406
+rate A <-> T: 0.763751
+rate C <-> G: 1.531107
+rate C <-> T: 6.159759
+rate G <-> T: 1.000000
+
+freq pi(A): 0.329049
+freq pi(C): 0.192806
+freq pi(G): 0.219003
+freq pi(T): 0.259142
+
+Final tree written to:                 /home/smirarab/projects/taper/Taper-Results/51/RAxML_result.score-after
+Execution Log File written to:         /home/smirarab/projects/taper/Taper-Results/51/RAxML_log.score-after

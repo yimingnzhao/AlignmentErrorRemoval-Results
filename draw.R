@@ -484,7 +484,7 @@ ggplot(aes(color=AlignmentName),
                       plot.tag.position = c(0.01, 0.975),plot.tag = element_text(size=12,face = "bold"))+labs(tag = "f)")+
   scale_y_continuous(name="Relative reduction in RF",labels=percent)+
   scale_color_brewer(palette = "Dark2",name=element_blank(),labels=c("TAPER","DivA"))+
-  scale_x_discrete(name=element_blank())+
+  scale_x_discrete(name=element_blank())
 ggsave("Figures/ErrParam_Figures/small-10-aa_RF.pdf",width = 2.2,height =4)
 
 ggplot(aes(color=N,x=DiameterRangeGene,y=(value-after)),data=bs2[bs2$AlignmentName=="16S.B",])+geom_point()+
@@ -988,7 +988,7 @@ ggplot(aes(x=n,y=TP/(TP+FN),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
   scale_color_brewer(palette = "Paired",name="")+
   geom_boxplot(aes(x="5%",fill="DivA",color="8×11"), width = 0.2,
                data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])+
-  scale_fill_discrete(name="")+
+  scale_fill_discrete(name="")
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_Recall.pdf",width = 5,height = 4.5)
 
 ggplot(aes(x=n,y=FP/(TP+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLen","small-10-aa_NumErrAlns"),])+
@@ -1008,7 +1008,7 @@ ggplot(aes(x=n,y=FP/(TN+FP),color=ErrLenT),data=d[d$E %in% c( "small-10-aa_ErrLe
   scale_shape(name="")+#facet_wrap(~E,labeller = function(x) list(E=c("Changing Error Length","Changing Error Frequency")))+
   scale_color_brewer(palette = "Paired",name="")+scale_x_discrete(name="Error Frequency")+
   geom_boxplot(aes(x="5%",fill="DivA",color="8×11"), width = 0.2, data=t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",])+
-  scale_fill_discrete(name="")+
+  scale_fill_discrete(name="")
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_FPR.pdf",width = 5,height = 4.5)
 
 
@@ -1026,7 +1026,7 @@ ggplot(aes(x=interaction(ErrLenT,n,sep=","),color="aTAPER",xend=interaction(ErrL
   scale_color_brewer(palette = "Dark2",name="",labels=c("TAPER","DivA"))+
   geom_segment(aes(color="DivA",x="8×11,5%",xend="8×11,5%"),
                data=data.table::dcast(setDT(t[t$AlignmentName=="small-10-aa-RV100-BBA0039-DivA",]),ErrLen~.,fun.aggregate = mean,value.var=c("FP","TP","TN","FN")),
-               position = position_nudge(x=0.2),size=0.8,arrow = arrow(length=unit(0.2,"cm")))+
+               position = position_nudge(x=0.2),size=0.8,arrow = arrow(length=unit(0.2,"cm")))
 ggsave("Figures/ErrParam_Figures/small-10-aa_ErrLenNumErr_percenterror_arrow_log.pdf",width = 7.5,height =4)
 
 ggplot(aes(x=interaction(ErrLenT,n,sep=", "),color="TAPER",
@@ -1410,17 +1410,21 @@ ggplot(read.csv('CSV_Files/gatsey-err-len.csv'),aes(x=L))+stat_ecdf()+
 ##########################################
 require(reshape2); require(ggplot2); require(scales)
 
-d=(read.csv('CSV_Files/st-likelihood.txt',he=F,sep=' '))
+sl=(read.csv('CSV_Files/st-likelihood.txt',he=F,sep=' '))
+#slold=(read.csv('CSV_Files/old-st-likelihood.txt',he=F,sep=' '))
+
 
 rc=read.csv('CSV_Files/removed-count-default.txt',head=F,sep=' '); 
 gtl=read.csv('CSV_Files/genetree-like.txt',sep=" ",header=F); 
-m=merge(dcast(V1~V2,data=d[,c(1,2,6)]),rc);names(m)[5:6]=c("removed","all");m=merge(m,dcast(V1~V2,data=gtl[,c(1,2,9)]),by="V1")
+m=merge(dcast(V1~V2,data=sl[,c(1,2,6)]),rc);
+names(m)[5:6]=c("removed","all");
+m=merge(m,dcast(V1~V2,data=gtl[,c(1,2,9)]),by="V1")
 
 
 
 ggplot(aes(x=removed/all,y=(before-after)/before),data=m)+
   geom_point(aes(shape="ST"),alpha=0.66)+
-  geom_point(aes(y=(before-befored.randomremoved)/before,shape="ST"),color="red",alpha=0.5)+
+  geom_point(aes(y=(before-after.randomremoved)/before,shape="ST"),color="red",alpha=0.5)+
   scale_x_continuous(labels=percent,name="Portition of nucleotides removed")+
   scale_y_continuous(labels=percent,name="Increase in likelihood")+
   theme_bw()+
@@ -1428,17 +1432,17 @@ ggplot(aes(x=removed/all,y=(before-after)/before),data=m)+
   geom_point(aes(y=(before.gt-after.gt)/before.gt,shape="GT"),alpha=0.66)+
   geom_point(aes(y=(before.gt-randomremoved.gt)/before.gt,shape="GT"),color="red",alpha=0.5)+
   scale_shape(name="")+theme(legend.position=c(.1,.8))+
-  ggsave("st-likelihood.pdf",width=5,height=3.5);
+  ggsave("Figures/ErrParam_Figures/st-likelihood.pdf",width=5,height=3.5);
 
 ggplot(aes(x=reorder(V1,removed/all),y=(before-after)/before),data=m)+
   geom_point(aes(shape="ST"),alpha=0.66)+
-  geom_point(aes(y=(before-befored.randomremoved)/before),color="red",alpha=0.5)+
+  geom_point(aes(y=(before-after.randomremoved)/before),color="red",alpha=0.5)+
   scale_y_continuous(labels=percent,name="Increase in likelihood")+
   theme_bw()+
   geom_text(aes(label=V1),size=0,nudge_y=0.0033,data=m[m$removed/m$all>.002,])+
   geom_point(aes(y=(before.gt-after.gt)/before.gt,shape="GT"),alpha=0.66)+
   scale_shape(name="")+theme(legend.position=c(.1,.8),axis.text.x=element_text(angle=90))+
   scale_x_discrete(name="genes (ordered by portion removed)")+
-  ggsave("likelihood-by-gene.pdf",width=6.5,height=3.5)
+  ggsave("Figures/ErrParam_Figures/likelihood-by-gene.pdf",width=6.5,height=3.5)
 
-qplot(reorder(V2,`.`), `.`,data=recast(read.csv('CSV_Files/removed-length.txt',sep=' ',h=F),V2~.,fun.ag=sum,measure.var="V3"))+theme_bw()+xlab("species")+ylab("total nucleotides removed")+theme(axis.text.x=element_text(angle=90))+ggsave("removed-len.pdf",width=8,height=4)
+#qplot(reorder(V2,`.`), `.`,data=recast(read.csv('CSV_Files/removed-length.txt',sep=' ',h=F),V2~.,fun.ag=sum,measure.var="V3"))+theme_bw()+xlab("species")+ylab("total nucleotides removed")+theme(axis.text.x=element_text(angle=90))+ggsave("removed-len.pdf",width=8,height=4)
