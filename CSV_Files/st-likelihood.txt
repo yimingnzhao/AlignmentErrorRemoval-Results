@@ -1,168 +1,336 @@
-1001 before Final GAMMA likelihood -14788.588341
-1001 after Final GAMMA likelihood -14594.002600
-1001 after.randomremoved Final GAMMA likelihood -14781.469866
-1005 before Final GAMMA likelihood -8327.376181
-1005 after Final GAMMA likelihood -8272.618770
-1005 after.randomremoved Final GAMMA likelihood -8324.653961
-1013 before Final GAMMA likelihood -5823.547207
-1013 after Final GAMMA likelihood -5560.929720
-1013 after.randomremoved Final GAMMA likelihood -5816.108652
-1014 before Final GAMMA likelihood -15852.359547
-1014 after Final GAMMA likelihood -15586.211926
-1014 after.randomremoved Final GAMMA likelihood -15836.534226
-1016 before Final GAMMA likelihood -22332.015249
-1016 after Final GAMMA likelihood -21989.351409
-1016 after.randomremoved Final GAMMA likelihood -22312.659310
-1020 before Final GAMMA likelihood -23713.397043
-1020 after Final GAMMA likelihood -23112.856215
-1020 after.randomremoved Final GAMMA likelihood -23690.452847
-1025 before Final GAMMA likelihood -21623.019888
-1025 after Final GAMMA likelihood -20910.381385
-1025 after.randomremoved Final GAMMA likelihood -21591.592578
-1027 before Final GAMMA likelihood -23939.154007
-1027 after Final GAMMA likelihood -23877.639549
-1027 after.randomremoved Final GAMMA likelihood -23930.670637
-1028 before Final GAMMA likelihood -12144.397289
-1028 after Final GAMMA likelihood -11534.206129
-1028 after.randomremoved Final GAMMA likelihood -12111.316514
-1029 before Final GAMMA likelihood -5583.344864
-1029 after Final GAMMA likelihood -5555.385891
-1029 after.randomremoved Final GAMMA likelihood -5582.824279
-1035 before Final GAMMA likelihood -9292.553045
-1035 after Final GAMMA likelihood -9160.778283
-1035 after.randomremoved Final GAMMA likelihood -9283.013448
-1036 before Final GAMMA likelihood -15871.060115
-1036 after Final GAMMA likelihood -15321.180988
-1036 after.randomremoved Final GAMMA likelihood -15813.897911
-1037 before Final GAMMA likelihood -7923.838045
-1037 after Final GAMMA likelihood -7563.658930
-1037 after.randomremoved Final GAMMA likelihood -7900.109070
-1038 before Final GAMMA likelihood -7652.987391
-1038 after Final GAMMA likelihood -7652.987391
-1038 after.randomremoved Final GAMMA likelihood -7652.987391
-1039 before Final GAMMA likelihood -22968.905201
-1039 after Final GAMMA likelihood -22432.842621
-1039 after.randomremoved Final GAMMA likelihood -22861.941875
-1040 before Final GAMMA likelihood -8472.092598
-1040 after Final GAMMA likelihood -8280.338580
-1040 after.randomremoved Final GAMMA likelihood -8457.141876
-1042 before Final GAMMA likelihood -8209.129794
-1042 after Final GAMMA likelihood -7579.527691
-1042 after.randomremoved Final GAMMA likelihood -8135.592876
-1044 before Final GAMMA likelihood -59168.923608
-1044 after Final GAMMA likelihood -57123.567655
-1044 after.randomremoved Final GAMMA likelihood -59024.060921
-1045 before Final GAMMA likelihood -14509.716122
-1045 after Final GAMMA likelihood -14412.343925
-1045 after.randomremoved Final GAMMA likelihood -14505.572774
-1049 before Final GAMMA likelihood -67648.872826
-1049 after Final GAMMA likelihood -67467.000501
-1049 after.randomremoved Final GAMMA likelihood -67624.815227
-1050 before Final GAMMA likelihood -9646.956175
-1050 after Final GAMMA likelihood -9646.956175
-1050 after.randomremoved Final GAMMA likelihood -9646.956175
-1054 before Final GAMMA likelihood -13572.268919
-1054 after Final GAMMA likelihood -12899.887914
-1054 after.randomremoved Final GAMMA likelihood -13265.869794
-1056 before Final GAMMA likelihood -2800.582502
-1056 after Final GAMMA likelihood -2800.582502
-1056 after.randomremoved Final GAMMA likelihood -2800.582502
-1062 before Final GAMMA likelihood -13246.386942
-1062 after Final GAMMA likelihood -13177.242841
-1062 after.randomremoved Final GAMMA likelihood -13239.753870
-1066 before Final GAMMA likelihood -9572.226930
-1066 after Final GAMMA likelihood -8512.301276
-1066 after.randomremoved Final GAMMA likelihood -9497.961494
-1067 before Final GAMMA likelihood -8087.957449
-1067 after Final GAMMA likelihood -8032.316639
-1067 after.randomremoved Final GAMMA likelihood -8087.376197
-1077 before Final GAMMA likelihood -16814.149627
-1077 after Final GAMMA likelihood -16463.576468
-1077 after.randomremoved Final GAMMA likelihood -16792.385613
-1078 before Final GAMMA likelihood -28576.311483
-1078 after Final GAMMA likelihood -28576.311483
-1078 after.randomremoved Final GAMMA likelihood -28576.311483
-1079 before Final GAMMA likelihood -13152.642608
-1079 after Final GAMMA likelihood -12975.850502
-1079 after.randomremoved Final GAMMA likelihood -13141.236955
-1083 before Final GAMMA likelihood -2723.747257
-1083 after Final GAMMA likelihood -2674.273908
-1083 after.randomremoved Final GAMMA likelihood -2723.210710
-1085 before Final GAMMA likelihood -14436.063935
-1085 after Final GAMMA likelihood -14287.150013
-1085 after.randomremoved Final GAMMA likelihood -14434.703924
-1087 before Final GAMMA likelihood -24598.675271
-1087 after Final GAMMA likelihood -23535.697333
-1087 after.randomremoved Final GAMMA likelihood -24513.679350
-1089 before Final GAMMA likelihood -13953.385709
-1089 after Final GAMMA likelihood -13656.802451
-1089 after.randomremoved Final GAMMA likelihood -13924.527128
-1094 before Final GAMMA likelihood -43632.321367
-1094 after Final GAMMA likelihood -42906.286598
-1094 after.randomremoved Final GAMMA likelihood -43557.699949
-1097 before Final GAMMA likelihood -19327.166341
-1097 after Final GAMMA likelihood -16756.477714
-1097 after.randomremoved Final GAMMA likelihood -19281.017230
-1098 before Final GAMMA likelihood -5353.823866
-1098 after Final GAMMA likelihood -4886.546611
-1098 after.randomremoved Final GAMMA likelihood -5352.532326
-12 before Final GAMMA likelihood -6210.559292
-12 after Final GAMMA likelihood -6210.559292
-12 after.randomremoved Final GAMMA likelihood -6210.559292
-16 before Final GAMMA likelihood -23244.705464
-16 after Final GAMMA likelihood -23041.258323
-16 after.randomremoved Final GAMMA likelihood -23233.527670
-20 before Final GAMMA likelihood -23125.823377
-20 after Final GAMMA likelihood -22874.242158
-20 after.randomremoved Final GAMMA likelihood -23075.635275
-28 before Final GAMMA likelihood -2327.454756
-28 after Final GAMMA likelihood -2292.912378
-28 after.randomremoved Final GAMMA likelihood -2326.529445
-30 before Final GAMMA likelihood -9883.088061
-30 after Final GAMMA likelihood -9545.845202
-30 after.randomremoved Final GAMMA likelihood -9815.329393
-37 before Final GAMMA likelihood -4727.375087
-37 after Final GAMMA likelihood -4727.375087
-37 after.randomremoved Final GAMMA likelihood -4727.375087
-44 before Final GAMMA likelihood -7297.725321
-44 after Final GAMMA likelihood -6684.294400
-44 after.randomremoved Final GAMMA likelihood -7261.083077
-51 before Final GAMMA likelihood -9917.525468
-51 after Final GAMMA likelihood -9882.113793
-51 after.randomremoved Final GAMMA likelihood -9917.187446
-56 before Final GAMMA likelihood -9125.323786
-56 after Final GAMMA likelihood -8827.458746
-56 after.randomremoved Final GAMMA likelihood -9107.767187
-5 before Final GAMMA likelihood -24142.584547
-5 after Final GAMMA likelihood -22373.810204
-5 after.randomremoved Final GAMMA likelihood -23969.751519
-62 before Final GAMMA likelihood -5216.193256
-62 after Final GAMMA likelihood -5216.193256
-62 after.randomremoved Final GAMMA likelihood -5216.193256
-64 before Final GAMMA likelihood -21721.548175
-64 after Final GAMMA likelihood -21189.561055
-64 after.randomremoved Final GAMMA likelihood -21690.261472
-74 before Final GAMMA likelihood -4088.050111
-74 after Final GAMMA likelihood -4065.363050
-74 after.randomremoved Final GAMMA likelihood -4088.009082
-82 before Final GAMMA likelihood -7721.041103
-82 after Final GAMMA likelihood -7285.601712
-82 after.randomremoved Final GAMMA likelihood -7705.064211
-84 before Final GAMMA likelihood -19409.951129
-84 after Final GAMMA likelihood -19386.271640
-84 after.randomremoved Final GAMMA likelihood -19401.365585
-88 before Final GAMMA likelihood -11416.077619
-88 after Final GAMMA likelihood -11265.322023
-88 after.randomremoved Final GAMMA likelihood -11415.408500
-89 before Final GAMMA likelihood -8377.155132
-89 after Final GAMMA likelihood -7754.034927
-89 after.randomremoved Final GAMMA likelihood -8311.508510
-90 before Final GAMMA likelihood -16224.887414
-90 after Final GAMMA likelihood -15638.957404
-90 after.randomremoved Final GAMMA likelihood -16195.782481
-93 before Final GAMMA likelihood -5368.689222
-93 after Final GAMMA likelihood -5314.161605
-93 after.randomremoved Final GAMMA likelihood -5365.548884
-99 before Final GAMMA likelihood -9155.000758
-99 after Final GAMMA likelihood -9028.430324
-99 after.randomremoved Final GAMMA likelihood -9144.980150
+1001 before Final GAMMA likelihood -14788.588341 Divvier
+1001 after Final GAMMA likelihood -14401.728477 Divvier
+1001 after.randomremoved Final GAMMA likelihood -14770.277916 Divvier
+1005 before Final GAMMA likelihood -8327.376181 Divvier
+1005 after Final GAMMA likelihood -7921.153894 Divvier
+1005 after.randomremoved Final GAMMA likelihood -8294.237944 Divvier
+1013 before Final GAMMA likelihood -5823.547207 Divvier
+1013 after Final GAMMA likelihood -5313.892743 Divvier
+1013 after.randomremoved Final GAMMA likelihood -5782.405292 Divvier
+1014 before Final GAMMA likelihood -15852.359547 Divvier
+1014 after Final GAMMA likelihood -13958.398694 Divvier
+1014 after.randomremoved Final GAMMA likelihood -15660.221683 Divvier
+1016 before Final GAMMA likelihood -22332.015249 Divvier
+1016 after Final GAMMA likelihood -21093.838402 Divvier
+1016 after.randomremoved Final GAMMA likelihood -22172.327744 Divvier
+1020 before Final GAMMA likelihood -23713.397043 Divvier
+1020 after Final GAMMA likelihood -21395.443538 Divvier
+1020 after.randomremoved Final GAMMA likelihood -23336.203983 Divvier
+1025 before Final GAMMA likelihood -21623.019888 Divvier
+1025 after Final GAMMA likelihood -17889.809035 Divvier
+1025 after.randomremoved Final GAMMA likelihood -21236.161480 Divvier
+1027 before Final GAMMA likelihood -23939.154007 Divvier
+1027 after Final GAMMA likelihood -22535.372592 Divvier
+1027 after.randomremoved Final GAMMA likelihood -23772.018440 Divvier
+1028 before Final GAMMA likelihood -12144.397289 Divvier
+1028 after Final GAMMA likelihood -10457.144419 Divvier
+1028 after.randomremoved Final GAMMA likelihood -12045.895861 Divvier
+1029 before Final GAMMA likelihood -5583.344864 Divvier
+1029 after Final GAMMA likelihood -4872.278129 Divvier
+1029 after.randomremoved Final GAMMA likelihood -5462.846000 Divvier
+1035 before Final GAMMA likelihood -9292.553045 Divvier
+1035 after Final GAMMA likelihood -8774.119845 Divvier
+1035 after.randomremoved Final GAMMA likelihood -9225.138883 Divvier
+1036 before Final GAMMA likelihood -15871.060115 Divvier
+1036 after Final GAMMA likelihood -13684.059430 Divvier
+1036 after.randomremoved Final GAMMA likelihood -15542.814761 Divvier
+1037 before Final GAMMA likelihood -7923.838045 Divvier
+1037 after Final GAMMA likelihood -6650.202809 Divvier
+1037 after.randomremoved Final GAMMA likelihood -7698.310677 Divvier
+1038 before Final GAMMA likelihood -7652.987391 Divvier
+1038 after Final GAMMA likelihood -7068.435327 Divvier
+1038 after.randomremoved Final GAMMA likelihood -7584.816740 Divvier
+1039 before Final GAMMA likelihood -22968.905201 Divvier
+1039 after Final GAMMA likelihood -18328.788997 Divvier
+1039 after.randomremoved Final GAMMA likelihood -22177.299500 Divvier
+1040 before Final GAMMA likelihood -8472.092598 Divvier
+1040 after Final GAMMA likelihood -7747.038814 Divvier
+1040 after.randomremoved Final GAMMA likelihood -8362.448694 Divvier
+1042 before Final GAMMA likelihood -8209.129794 Divvier
+1042 after Final GAMMA likelihood -6978.003284 Divvier
+1042 after.randomremoved Final GAMMA likelihood -7964.704226 Divvier
+1044 before Final GAMMA likelihood -59168.923608 Divvier
+1044 after Final GAMMA likelihood -53776.474667 Divvier
+1044 after.randomremoved Final GAMMA likelihood -58466.919617 Divvier
+1045 before Final GAMMA likelihood -14509.716122 Divvier
+1045 after Final GAMMA likelihood -13986.378805 Divvier
+1045 after.randomremoved Final GAMMA likelihood -14474.293601 Divvier
+1049 before Final GAMMA likelihood -67648.872826 Divvier
+1049 after Final GAMMA likelihood -65085.515717 Divvier
+1049 after.randomremoved Final GAMMA likelihood -66984.963991 Divvier
+1050 before Final GAMMA likelihood -9646.956175 Divvier
+1050 after Final GAMMA likelihood -9349.726367 Divvier
+1050 after.randomremoved Final GAMMA likelihood -9599.447270 Divvier
+1054 before Final GAMMA likelihood -13572.268919 Divvier
+1054 after Final GAMMA likelihood -12149.151661 Divvier
+1054 after.randomremoved Final GAMMA likelihood -13442.642725 Divvier
+1056 before Final GAMMA likelihood -2800.582502 Divvier
+1056 after Final GAMMA likelihood -2319.081898 Divvier
+1056 after.randomremoved Final GAMMA likelihood -2726.662403 Divvier
+1062 before Final GAMMA likelihood -13246.386942 Divvier
+1062 after Final GAMMA likelihood -12857.942980 Divvier
+1062 after.randomremoved Final GAMMA likelihood -13204.037817 Divvier
+1066 before Final GAMMA likelihood -9572.226930 Divvier
+1066 after Final GAMMA likelihood -8062.748916 Divvier
+1066 after.randomremoved Final GAMMA likelihood -9391.522326 Divvier
+1067 before Final GAMMA likelihood -8087.957449 Divvier
+1067 after Final GAMMA likelihood -7483.508250 Divvier
+1067 after.randomremoved Final GAMMA likelihood -8046.678254 Divvier
+1077 before Final GAMMA likelihood -16814.149627 Divvier
+1077 after Final GAMMA likelihood -15824.920534 Divvier
+1077 after.randomremoved Final GAMMA likelihood -16749.749721 Divvier
+1078 before Final GAMMA likelihood -28576.311483 Divvier
+1078 after Final GAMMA likelihood -27231.533166 Divvier
+1078 after.randomremoved Final GAMMA likelihood -28334.788211 Divvier
+1079 before Final GAMMA likelihood -13152.642608 Divvier
+1079 after Final GAMMA likelihood -12101.980576 Divvier
+1079 after.randomremoved Final GAMMA likelihood -13059.303215 Divvier
+1083 before Final GAMMA likelihood -2723.747257 Divvier
+1083 after Final GAMMA likelihood -2513.508699 Divvier
+1083 after.randomremoved Final GAMMA likelihood -2680.769830 Divvier
+1085 before Final GAMMA likelihood -14436.063935 Divvier
+1085 after Final GAMMA likelihood -13947.389037 Divvier
+1085 after.randomremoved Final GAMMA likelihood -14329.762763 Divvier
+1087 before Final GAMMA likelihood -24598.675271 Divvier
+1087 after Final GAMMA likelihood -22261.182169 Divvier
+1087 after.randomremoved Final GAMMA likelihood -24444.980256 Divvier
+1089 before Final GAMMA likelihood -13953.385709 Divvier
+1089 after Final GAMMA likelihood -12447.388940 Divvier
+1089 after.randomremoved Final GAMMA likelihood -13723.835163 Divvier
+1094 before Final GAMMA likelihood -43632.321367 Divvier
+1094 after Final GAMMA likelihood -39024.170343 Divvier
+1094 after.randomremoved Final GAMMA likelihood -42915.743499 Divvier
+1097 before Final GAMMA likelihood -19327.166341 Divvier
+1097 after Final GAMMA likelihood -13692.242815 Divvier
+1097 after.randomremoved Final GAMMA likelihood -18897.364369 Divvier
+1098 before Final GAMMA likelihood -5353.823866 Divvier
+1098 after Final GAMMA likelihood -4403.489060 Divvier
+1098 after.randomremoved Final GAMMA likelihood -5229.899753 Divvier
+12 before Final GAMMA likelihood -6210.559292 Divvier
+12 after Final GAMMA likelihood -5701.630159 Divvier
+12 after.randomremoved Final GAMMA likelihood -6036.692725 Divvier
+16 before Final GAMMA likelihood -23244.705464 Divvier
+16 after Final GAMMA likelihood -22393.825581 Divvier
+16 after.randomremoved Final GAMMA likelihood -23130.258581 Divvier
+20 before Final GAMMA likelihood -23125.823377 Divvier
+20 after Final GAMMA likelihood -19508.408874 Divvier
+20 after.randomremoved Final GAMMA likelihood -22480.487012 Divvier
+28 before Final GAMMA likelihood -2327.454756 Divvier
+28 after Final GAMMA likelihood -1551.384469 Divvier
+28 after.randomremoved Final GAMMA likelihood -2246.545151 Divvier
+30 before Final GAMMA likelihood -9883.088061 Divvier
+30 after Final GAMMA likelihood -9286.321256 Divvier
+30 after.randomremoved Final GAMMA likelihood -9840.014541 Divvier
+37 before Final GAMMA likelihood -4727.375087 Divvier
+37 after Final GAMMA likelihood -4251.124589 Divvier
+37 after.randomremoved Final GAMMA likelihood -4580.875537 Divvier
+44 before Final GAMMA likelihood -7297.725321 Divvier
+44 after Final GAMMA likelihood -6370.839153 Divvier
+44 after.randomremoved Final GAMMA likelihood -7239.798924 Divvier
+51 before Final GAMMA likelihood -9917.525468 Divvier
+51 after Final GAMMA likelihood -9219.715827 Divvier
+51 after.randomremoved Final GAMMA likelihood -9837.038132 Divvier
+56 before Final GAMMA likelihood -9125.323786 Divvier
+56 after Final GAMMA likelihood -8137.725995 Divvier
+56 after.randomremoved Final GAMMA likelihood -8995.366237 Divvier
+5 before Final GAMMA likelihood -24142.584547 Divvier
+5 after Final GAMMA likelihood -17281.947270 Divvier
+5 after.randomremoved Final GAMMA likelihood -22931.636731 Divvier
+62 before Final GAMMA likelihood -5216.193256 Divvier
+62 after Final GAMMA likelihood -4945.799875 Divvier
+62 after.randomremoved Final GAMMA likelihood -5205.864635 Divvier
+64 before Final GAMMA likelihood -21721.548175 Divvier
+64 after Final GAMMA likelihood -20375.387687 Divvier
+64 after.randomremoved Final GAMMA likelihood -21516.206393 Divvier
+74 before Final GAMMA likelihood -4088.050111 Divvier
+74 after Final GAMMA likelihood -3959.973592 Divvier
+74 after.randomremoved Final GAMMA likelihood -4035.920314 Divvier
+82 before Final GAMMA likelihood -7721.041103 Divvier
+82 after Final GAMMA likelihood -7054.229535 Divvier
+82 after.randomremoved Final GAMMA likelihood -7666.388353 Divvier
+84 before Final GAMMA likelihood -19409.951129 Divvier
+84 after Final GAMMA likelihood -18083.830237 Divvier
+84 after.randomremoved Final GAMMA likelihood -19135.081248 Divvier
+88 before Final GAMMA likelihood -11416.077619 Divvier
+88 after Final GAMMA likelihood -10958.315326 Divvier
+88 after.randomremoved Final GAMMA likelihood -11400.432005 Divvier
+89 before Final GAMMA likelihood -8377.155132 Divvier
+89 after Final GAMMA likelihood -7409.495413 Divvier
+89 after.randomremoved Final GAMMA likelihood -8311.066502 Divvier
+90 before Final GAMMA likelihood -16224.887414 Divvier
+90 after Final GAMMA likelihood -14153.567937 Divvier
+90 after.randomremoved Final GAMMA likelihood -15957.994913 Divvier
+93 before Final GAMMA likelihood -5368.689222 Divvier
+93 after Final GAMMA likelihood -5085.137086 Divvier
+93 after.randomremoved Final GAMMA likelihood -5344.625305 Divvier
+99 before Final GAMMA likelihood -9155.000758 Divvier
+99 after Final GAMMA likelihood -7590.079748 Divvier
+99 after.randomremoved Final GAMMA likelihood -8967.518223 Divvier
+1001 before Final GAMMA likelihood -14788.588341 Taper
+1001 after Final GAMMA likelihood -14594.002600 Taper
+1001 after.randomremoved Final GAMMA likelihood -14781.469866 Taper
+1005 before Final GAMMA likelihood -8327.376181 Taper
+1005 after Final GAMMA likelihood -8272.618770 Taper
+1005 after.randomremoved Final GAMMA likelihood -8324.653961 Taper
+1013 before Final GAMMA likelihood -5823.547207 Taper
+1013 after Final GAMMA likelihood -5560.929720 Taper
+1013 after.randomremoved Final GAMMA likelihood -5816.108652 Taper
+1014 before Final GAMMA likelihood -15852.359547 Taper
+1014 after Final GAMMA likelihood -15586.211926 Taper
+1014 after.randomremoved Final GAMMA likelihood -15836.534226 Taper
+1016 before Final GAMMA likelihood -22332.015249 Taper
+1016 after Final GAMMA likelihood -21989.351409 Taper
+1016 after.randomremoved Final GAMMA likelihood -22312.659310 Taper
+1020 before Final GAMMA likelihood -23713.397043 Taper
+1020 after Final GAMMA likelihood -23112.856215 Taper
+1020 after.randomremoved Final GAMMA likelihood -23690.452847 Taper
+1025 before Final GAMMA likelihood -21623.019888 Taper
+1025 after Final GAMMA likelihood -20910.381385 Taper
+1025 after.randomremoved Final GAMMA likelihood -21591.592578 Taper
+1027 before Final GAMMA likelihood -23939.154007 Taper
+1027 after Final GAMMA likelihood -23877.639549 Taper
+1027 after.randomremoved Final GAMMA likelihood -23930.670637 Taper
+1028 before Final GAMMA likelihood -12144.397289 Taper
+1028 after Final GAMMA likelihood -11534.206129 Taper
+1028 after.randomremoved Final GAMMA likelihood -12111.316514 Taper
+1029 before Final GAMMA likelihood -5583.344864 Taper
+1029 after Final GAMMA likelihood -5555.385891 Taper
+1029 after.randomremoved Final GAMMA likelihood -5582.824279 Taper
+1035 before Final GAMMA likelihood -9292.553045 Taper
+1035 after Final GAMMA likelihood -9160.778283 Taper
+1035 after.randomremoved Final GAMMA likelihood -9283.013448 Taper
+1036 before Final GAMMA likelihood -15871.060115 Taper
+1036 after Final GAMMA likelihood -15321.180988 Taper
+1036 after.randomremoved Final GAMMA likelihood -15813.897911 Taper
+1037 before Final GAMMA likelihood -7923.838045 Taper
+1037 after Final GAMMA likelihood -7563.658930 Taper
+1037 after.randomremoved Final GAMMA likelihood -7900.109070 Taper
+1038 before Final GAMMA likelihood -7652.987391 Taper
+1038 after Final GAMMA likelihood -7652.987391 Taper
+1038 after.randomremoved Final GAMMA likelihood -7652.987391 Taper
+1039 before Final GAMMA likelihood -22968.905201 Taper
+1039 after Final GAMMA likelihood -22432.842621 Taper
+1039 after.randomremoved Final GAMMA likelihood -22861.941875 Taper
+1040 before Final GAMMA likelihood -8472.092598 Taper
+1040 after Final GAMMA likelihood -8280.338580 Taper
+1040 after.randomremoved Final GAMMA likelihood -8457.141876 Taper
+1042 before Final GAMMA likelihood -8209.129794 Taper
+1042 after Final GAMMA likelihood -7579.527691 Taper
+1042 after.randomremoved Final GAMMA likelihood -8135.592876 Taper
+1044 before Final GAMMA likelihood -59168.923608 Taper
+1044 after Final GAMMA likelihood -57123.567655 Taper
+1044 after.randomremoved Final GAMMA likelihood -59024.060921 Taper
+1045 before Final GAMMA likelihood -14509.716122 Taper
+1045 after Final GAMMA likelihood -14412.343925 Taper
+1045 after.randomremoved Final GAMMA likelihood -14505.572774 Taper
+1049 before Final GAMMA likelihood -67648.872826 Taper
+1049 after Final GAMMA likelihood -67467.000501 Taper
+1049 after.randomremoved Final GAMMA likelihood -67624.815227 Taper
+1050 before Final GAMMA likelihood -9646.956175 Taper
+1050 after Final GAMMA likelihood -9646.956175 Taper
+1050 after.randomremoved Final GAMMA likelihood -9646.956175 Taper
+1054 before Final GAMMA likelihood -13572.268919 Taper
+1054 after Final GAMMA likelihood -12899.887914 Taper
+1054 after.randomremoved Final GAMMA likelihood -13265.869794 Taper
+1056 before Final GAMMA likelihood -2800.582502 Taper
+1056 after Final GAMMA likelihood -2800.582502 Taper
+1056 after.randomremoved Final GAMMA likelihood -2800.582502 Taper
+1062 before Final GAMMA likelihood -13246.386942 Taper
+1062 after Final GAMMA likelihood -13177.242841 Taper
+1062 after.randomremoved Final GAMMA likelihood -13239.753870 Taper
+1066 before Final GAMMA likelihood -9572.226930 Taper
+1066 after Final GAMMA likelihood -8512.301276 Taper
+1066 after.randomremoved Final GAMMA likelihood -9497.961494 Taper
+1067 before Final GAMMA likelihood -8087.957449 Taper
+1067 after Final GAMMA likelihood -8032.316639 Taper
+1067 after.randomremoved Final GAMMA likelihood -8087.376197 Taper
+1077 before Final GAMMA likelihood -16814.149627 Taper
+1077 after Final GAMMA likelihood -16463.576468 Taper
+1077 after.randomremoved Final GAMMA likelihood -16792.385613 Taper
+1078 before Final GAMMA likelihood -28576.311483 Taper
+1078 after Final GAMMA likelihood -28576.311483 Taper
+1078 after.randomremoved Final GAMMA likelihood -28576.311483 Taper
+1079 before Final GAMMA likelihood -13152.642608 Taper
+1079 after Final GAMMA likelihood -12975.850502 Taper
+1079 after.randomremoved Final GAMMA likelihood -13141.236955 Taper
+1083 before Final GAMMA likelihood -2723.747257 Taper
+1083 after Final GAMMA likelihood -2674.273908 Taper
+1083 after.randomremoved Final GAMMA likelihood -2723.210710 Taper
+1085 before Final GAMMA likelihood -14436.063935 Taper
+1085 after Final GAMMA likelihood -14287.150013 Taper
+1085 after.randomremoved Final GAMMA likelihood -14434.703924 Taper
+1087 before Final GAMMA likelihood -24598.675271 Taper
+1087 after Final GAMMA likelihood -23535.697333 Taper
+1087 after.randomremoved Final GAMMA likelihood -24513.679350 Taper
+1089 before Final GAMMA likelihood -13953.385709 Taper
+1089 after Final GAMMA likelihood -13656.802451 Taper
+1089 after.randomremoved Final GAMMA likelihood -13924.527128 Taper
+1094 before Final GAMMA likelihood -43632.321367 Taper
+1094 after Final GAMMA likelihood -42906.286598 Taper
+1094 after.randomremoved Final GAMMA likelihood -43557.699949 Taper
+1097 before Final GAMMA likelihood -19327.166341 Taper
+1097 after Final GAMMA likelihood -16756.477714 Taper
+1097 after.randomremoved Final GAMMA likelihood -19281.017230 Taper
+1098 before Final GAMMA likelihood -5353.823866 Taper
+1098 after Final GAMMA likelihood -4886.546611 Taper
+1098 after.randomremoved Final GAMMA likelihood -5352.532326 Taper
+12 before Final GAMMA likelihood -6210.559292 Taper
+12 after Final GAMMA likelihood -6210.559292 Taper
+12 after.randomremoved Final GAMMA likelihood -6210.559292 Taper
+16 before Final GAMMA likelihood -23244.705464 Taper
+16 after Final GAMMA likelihood -23041.258323 Taper
+16 after.randomremoved Final GAMMA likelihood -23233.527670 Taper
+20 before Final GAMMA likelihood -23125.823377 Taper
+20 after Final GAMMA likelihood -22874.242158 Taper
+20 after.randomremoved Final GAMMA likelihood -23075.635275 Taper
+28 before Final GAMMA likelihood -2327.454756 Taper
+28 after Final GAMMA likelihood -2292.912378 Taper
+28 after.randomremoved Final GAMMA likelihood -2326.529445 Taper
+30 before Final GAMMA likelihood -9883.088061 Taper
+30 after Final GAMMA likelihood -9545.845202 Taper
+30 after.randomremoved Final GAMMA likelihood -9815.329393 Taper
+37 before Final GAMMA likelihood -4727.375087 Taper
+37 after Final GAMMA likelihood -4727.375087 Taper
+37 after.randomremoved Final GAMMA likelihood -4727.375087 Taper
+44 before Final GAMMA likelihood -7297.725321 Taper
+44 after Final GAMMA likelihood -6684.294400 Taper
+44 after.randomremoved Final GAMMA likelihood -7261.083077 Taper
+51 before Final GAMMA likelihood -9917.525468 Taper
+51 after Final GAMMA likelihood -9882.113793 Taper
+51 after.randomremoved Final GAMMA likelihood -9917.187446 Taper
+56 before Final GAMMA likelihood -9125.323786 Taper
+56 after Final GAMMA likelihood -8827.458746 Taper
+56 after.randomremoved Final GAMMA likelihood -9107.767187 Taper
+5 before Final GAMMA likelihood -24142.584547 Taper
+5 after Final GAMMA likelihood -22373.810204 Taper
+5 after.randomremoved Final GAMMA likelihood -23969.751519 Taper
+62 before Final GAMMA likelihood -5216.193256 Taper
+62 after Final GAMMA likelihood -5216.193256 Taper
+62 after.randomremoved Final GAMMA likelihood -5216.193256 Taper
+64 before Final GAMMA likelihood -21721.548175 Taper
+64 after Final GAMMA likelihood -21189.561055 Taper
+64 after.randomremoved Final GAMMA likelihood -21690.261472 Taper
+74 before Final GAMMA likelihood -4088.050111 Taper
+74 after Final GAMMA likelihood -4065.363050 Taper
+74 after.randomremoved Final GAMMA likelihood -4088.009082 Taper
+82 before Final GAMMA likelihood -7721.041103 Taper
+82 after Final GAMMA likelihood -7285.601712 Taper
+82 after.randomremoved Final GAMMA likelihood -7705.064211 Taper
+84 before Final GAMMA likelihood -19409.951129 Taper
+84 after Final GAMMA likelihood -19386.271640 Taper
+84 after.randomremoved Final GAMMA likelihood -19401.365585 Taper
+88 before Final GAMMA likelihood -11416.077619 Taper
+88 after Final GAMMA likelihood -11265.322023 Taper
+88 after.randomremoved Final GAMMA likelihood -11415.408500 Taper
+89 before Final GAMMA likelihood -8377.155132 Taper
+89 after Final GAMMA likelihood -7754.034927 Taper
+89 after.randomremoved Final GAMMA likelihood -8311.508510 Taper
+90 before Final GAMMA likelihood -16224.887414 Taper
+90 after Final GAMMA likelihood -15638.957404 Taper
+90 after.randomremoved Final GAMMA likelihood -16195.782481 Taper
+93 before Final GAMMA likelihood -5368.689222 Taper
+93 after Final GAMMA likelihood -5314.161605 Taper
+93 after.randomremoved Final GAMMA likelihood -5365.548884 Taper
+99 before Final GAMMA likelihood -9155.000758 Taper
+99 after Final GAMMA likelihood -9028.430324 Taper
+99 after.randomremoved Final GAMMA likelihood -9144.980150 Taper
